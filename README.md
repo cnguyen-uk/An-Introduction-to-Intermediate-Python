@@ -113,7 +113,7 @@ Triple double quotes should be used around docstrings and there should be a blan
 
 #### One-Line Docstrings
 
-One-line docstrings are for obvious cases. They should be a phrase ending in a period and it should prescribs the function or method's effect as a command, not as a description. For example, the following is preferred:
+One-line docstrings are for obvious cases. There should not be a blank line before or after the docstring, and it should be a phrase ending in a period which prescribes the function or method's effect as a command, not as a description. For example, the following is preferred:
 
 ```Python
 def triple(x)
