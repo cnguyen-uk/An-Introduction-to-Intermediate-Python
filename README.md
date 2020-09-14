@@ -14,6 +14,9 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Aggregating Iterables](#aggregating-iterables)
   * [Using `in` With `print()`](#using-in-with-print)
   * [List Comprehension](#list-comprehension)
+  * [Comments](#comments)
+    +[Inline Comments](#inline-comments)
+    +[Block Comments](#block-comments)
 
 ## Quick Useful Python
 
@@ -68,3 +71,33 @@ List comprehension allows for the creation of lists in a concise way. The basic 
 Expressions can be anything, and we can have as many `for` or `if` statements as we like, including zero.
 
 Set and dictionary comprehension works in the same way.
+
+### Comments
+
+Every Python course will cover how to comment, but not every course will discuss good standards for commenting. Good standards are important for consistency and accessibility for whoever is reading the code. Best standards for comments can be read about in more detail [here](https://www.python.org/dev/peps/pep-0008/#comments).
+
+#### Inline Comments
+
+Inline comments should be used sparingly and not state the obvious. They should be separated by at least two spaces from the code and use descriptive language rather than commanding. For example, the following is preferred:
+
+```Python
+x = x + 1  # Compensate for border
+```
+
+As a comparison, the following should be avoided:
+
+```Python
+x = x + 1 # Compensates for border
+```
+
+#### Block Comments
+
+Block comments should be written in complete sentences, be indented with the code which it is commenting, and come *before* the code which it is commenting. Placing the comment after is merciless on a confused reader. Paragraphs are separated by a single line containing a single `#`, and multi-sentence comments should have two spaces after a sentence-ending period (except after the final sentence).
+
+```Python
+# This function triples a number.  It does not check for valid input.
+#
+# It's quite a nice function.
+def triple(x):
+	return 3*x
+```
