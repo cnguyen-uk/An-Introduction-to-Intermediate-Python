@@ -15,8 +15,11 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Using `in` With `print()`](#using-in-with-print)
   * [List Comprehension](#list-comprehension)
   * [Comments](#comments)
-    +[Inline Comments](#inline-comments)
-    +[Block Comments](#block-comments)
+    + [Inline Comments](#inline-comments)
+    + [Block Comments](#block-comments)
+  * [Docstrings](#docstrings)
+    + [One-Line Docstrings](#one-line-docstrings)
+    + [Multi-Line Docstrings](#multi-line-docstrings)
 
 ## Quick Useful Python
 
@@ -100,4 +103,45 @@ Block comments should be written in complete sentences, be indented with the cod
 # It's quite a nice function.
 def triple(x):
 	return 3*x
+```
+
+### Docstrings
+
+Similar but different to comments, a docstring is a string that appears as the first statement in a module, function, class, or method definition, and is used to document what they do. Docstrings are usually used for modules, and all classes and functions exported by that module.
+
+Triple double quotes should be used around docstrings and there should be a blank line after all docstrings that document a class. Best standards for docstrings can be read about in more detail [here](https://www.python.org/dev/peps/pep-0257/).
+
+#### One-Line Docstrings
+
+One-line docstrings are for obvious cases. They should be a phrase ending in a period and it should prescribs the function or method's effect as a command, not as a description. For example, the following is preferred:
+
+```Python
+def triple(x)
+"""Return the triple of a number."""
+	return 3*x
+```
+
+As a comparison, the following should be avoided:
+
+```Python
+def triple(x)
+"""Returns the triple of a number."""
+	return 3*x
+```
+
+#### Multi-Line Docstrings
+
+Multi-line docstrings begin with a summary line, on the same line as the starting triple quotes, followed by a space, a more elaborate description, and then the ending triple quotes on a line by themselves. For example:
+
+```Python
+def power(x, y=2, z=4)
+"""Raise x to the power of y, then multiply by 4.
+
+Arguments:
+x -- the base number
+y -- the exponent (default 2)
+z -- the multiplier (defult 4)
+"""
+
+	return x**y
 ```
