@@ -117,7 +117,7 @@ One-line docstrings are for obvious cases. They should be a phrase ending in a p
 
 ```Python
 def triple(x)
-"""Return the triple of a number."""
+	"""Return the triple of a number."""
 	return 3*x
 ```
 
@@ -125,7 +125,7 @@ As a comparison, the following should be avoided:
 
 ```Python
 def triple(x)
-"""Returns the triple of a number."""
+	"""Returns the triple of a number."""
 	return 3*x
 ```
 
@@ -135,13 +135,13 @@ Multi-line docstrings begin with a summary line, on the same line as the startin
 
 ```Python
 def power(x, y=2, z=4)
-"""Raise x to the power of y, then multiply by 4.
-
-Arguments:
-x -- the base number
-y -- the exponent (default 2)
-z -- the multiplier (defult 4)
-"""
+	"""Raise x to the power of y, then multiply by 4.
+	
+	Arguments:
+	x -- the base number
+	y -- the exponent (default 2)
+	z -- the multiplier (defult 4)
+	"""
 
 	return x**y
 ```
