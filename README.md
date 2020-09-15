@@ -23,6 +23,10 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
 - [Modules](#modules)
   * [Importing Particular Objects from a Module](#importing-particular-objects-from-a-module)
   * [Importing All Objects from a Module](#importing-all-objects-from-a-module)
+- [Dictionary Methods](#dictionary-methods)
+  * [Retrieval and Removal](#retrieval-and-removal)
+  * [Dictionary View Objects](#dictionary-view-objects)
+  * [A Neat Trick](#a-neat-trick)
 
 ## Quick Useful Python
 
@@ -196,3 +200,76 @@ import module_name as alias_name
 
 alias_name.object_name()
 ```
+
+## Dictionary Methods
+
+Recall that a dictionary is an unordered collection of data, stored as key-value pairs, and that keys must be an immutable data type, while values can be any data type.
+
+### Retrieval and Removal
+
+Recall also that accessing a value for a particular value can be done using the following syntax:
+
+```Python
+dictionary[key]
+```
+
+However, if the key does not exist then a `KeyError` will be thrown. To safely return values for keys, we can instead use the `get()` method. This will return `None` if the key does not exist, unless a second argument is specified.
+
+```Python
+dictionary.get(key)
+```
+
+The `list()` constructor returns a list of all keys in a dictionary.
+
+```Python
+list(dictionary)
+```
+
+The `pop()` method works like on a list - it removes a specified key (and hence its value), and returns the value corresponding to the removed key. If the key doesn't exist then a `KeyError` will be thrown, unless a second argument is specified (similar to the `get()` method).
+
+```Python
+dictionary.pop(key)
+```
+
+### Dictionary View Objects
+
+Dictionary view objects can be iterated over and provide a window to look at the dictionary through. This is in contrast to `list()` which actually creates an object. The benefit is that only a small and fixed amount of memory and processing time is required, since a list does not need to be created.
+
+The `keys()` method returns a dictionary view object of keys, with class `dict_keys`.
+
+```Python
+dictionary.keys()
+```
+
+The `values()` method returns a dictionary view object of values, with class `dict_values`.
+
+```Python
+dictionary.values()
+```
+
+The `items()` method returns a dictionary view object of tuples (key, value), with class `dict_items`.
+
+```Python
+dictionary.items()
+```
+
+Note that since dictionary view objects can be iterated over, the following equivalence holds:
+
+```Python
+list(dictionary.keys()) == list(dictionary)
+```
+
+### A Neat Trick
+
+The `fromkeys()` method returns a dictionary with elements from the list as keys. Each key will have value `None`, unless a second argument is specified. The syntax is as follows:
+
+```Python
+dict.fromkeys(list_name)
+```
+
+This can be used to remove duplicates from a list.
+
+```Python
+list(dict.fromkeys(list_name))
+
+Of course, the elements of the initial list must be immutable, but some further tricks can be used. For example, if an element of the list is a list, then we can convert it into a tuple, remove any duplicates, and then convert that element back into a list again.
