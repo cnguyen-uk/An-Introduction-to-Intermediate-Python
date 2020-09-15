@@ -143,7 +143,7 @@ def power(x, y=2, z=4)
 	Arguments:
 	x -- the base number
 	y -- the exponent (default 2)
-	z -- the multiplier (defult 4)
+	z -- the multiplier (default 4)
 	"""
 	return x**y
 ```
