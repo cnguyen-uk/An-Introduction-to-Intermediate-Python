@@ -20,6 +20,9 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Docstrings](#docstrings)
     + [One-Line Docstrings](#one-line-docstrings)
     + [Multi-Line Docstrings](#multi-line-docstrings)
+- [Modules](#modules)
+  * [Importing Particular Objects from a Module](#importing-particular-objects-from-a-module)
+  * [Importing All Objects from a Module](#importing-all-objects-from-a-module)
 
 ## Quick Useful Python
 
@@ -143,4 +146,53 @@ def power(x, y=2, z=4)
 	z -- the multiplier (defult 4)
 	"""
 	return x**y
+```
+
+## Modules
+
+Modules allow for the usage of objects from outside of what's usually available. In fact, files are actually modules, so we can use the `import` keyword to access another file's contents within the same directory. Below we'll see various ways of using the `import` keyword.
+
+### Importing Particular Objects from a Module
+
+If we want to import and call a particular object from a module, then we can use the following syntax:
+
+```Python
+from module_name import object_name
+
+object_name()
+```
+
+As seen [here](https://www.python.org/dev/peps/pep-0008/#imports), the stylistically correct way to import multiple objects from multiple modules is as follows (note the compression of objects onto one line and the separation of modules over multiple lines):
+
+```Python
+from module_name1 import object_name1, object_name2, object_name3
+from module_name2 import object_nameA, object_nameB
+```
+
+We can also use the `as` keyword to give an imported object an alias. We can then call the object using its alias. In particular, using aliases can be useful when object names being imported conflict within our local namespace.
+
+```Python
+from module_name import object_name as alias_name
+
+alias_name()
+```
+
+### Importing All Objects from a Module
+
+Instead of importing objects one at a time from a module, we may also import them all at once. As we will see, this way of importing requires specifying the module (or its alias) every time we call any objects from it. This is useful if we want to call several different objects from the module and want clarity in the code on where these objects have originated from.
+
+To import a module and call a particular object from that module, then we can use the following syntax:
+
+```Python
+import module_name
+
+module_name.object_name()
+```
+
+Similar to the previous section, we can also use the `as` keyword to give the imported module an alias. We can then call a particular object from the module using the alias. Also similar to the previous section, using aliases can be useful when module names being imported conflict within our local namespace.
+
+```Python
+import module_name as alias_name
+
+alias_name.object_name()
 ```
