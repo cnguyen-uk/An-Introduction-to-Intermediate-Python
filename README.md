@@ -271,5 +271,6 @@ This can be used to remove duplicates from a list.
 
 ```Python
 list(dict.fromkeys(list_name))
+```
 
 Of course, the elements of the initial list must be immutable, but some further tricks can be used. For example, if an element of the list is a list, then we can convert it into a tuple, remove any duplicates, and then convert that element back into a list again.
