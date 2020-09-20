@@ -27,6 +27,15 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Retrieval and Removal](#retrieval-and-removal)
   * [Dictionary View Objects](#dictionary-view-objects)
   * [A Neat Trick](#a-neat-trick)
+- [Files](#files)
+  * [Interactions](#interactions)
+  * [Methods](#methods)
+  * [CSV Files](#csv-files)
+    + [Reading](#reading)
+    + [Writing](#writing)
+  * [JSON Files](#json-files)
+    + [Reading](#reading-1)
+    + [Writing](#writing-1)
 
 ## Quick Useful Python
 
@@ -274,3 +283,147 @@ list(dict.fromkeys(list_name))
 ```
 
 Of course, the elements of the initial list must be immutable, but some further tricks can be used. For example, if an element of the list is a list, then we can convert it into a tuple, remove any duplicates, and then convert that element back into a list again.
+
+## Files
+
+Python is commonly used as a scripting language in industrial automation. In particular, it is common to want to automate interaction with different file types.
+
+### Interactions
+
+The `with` keyword creates a context manager, i.e. an indented block which can be used to work on an opened file, where leaving the indented block closes the file. This is often used in conjunction with the `open()` function to open a file. We can also include an optional second argument: `'r'` for read (the default), `'w'` for overwrite, `'a'` for append, and `'x'` for create.
+
+```Python
+with open('document.txt') as doc_name:
+	doc_name.method()
+```
+
+### Methods
+
+The `read()` method reads the file and returns its contents as a single string.
+
+```Python
+doc_name.read()
+```
+
+The `readlines()` method reads the file line by line and returns a list, where the elements are the lines.
+
+```Python
+doc_name.readlines()
+```
+
+The `readline()` method reads and returns one line of the file. Subsequent calls will read and return the next line. If there are no lines left, then the method will return an empty string.
+
+```Python
+doc_name.readline()
+```
+
+The `write()` method writes to the file.
+
+```Python
+doc_name.write()
+```
+
+### CSV Files
+
+CSV (Comma-Separated Values) files are one of the most common file types in which data is stored. In a typical CSV file, the first line of data (i.e. the header) contains the labels of the data that's present in the rest of the file.
+
+#### Reading
+
+Consider a CSV file, named `people.csv`, which contains the following information:
+
+```
+id,name,age
+1,Alice,20
+2,Freddie,21
+3,Bob,17
+```
+
+The `DictReader` class from the `csv` module can be used to convert each line into a dictionary. By default, the keys are the labels in the first line of the CSV file. It is also typical to pass the keyword argument `newline=''` to the `open()` function so that line breaks in data fields are interpreted correctly (see [here](https://docs.python.org/3/library/csv.html#id3) for further details).
+
+```Python
+import csv
+
+with open('people.csv', newline='') as people_csv:
+	people_reader = csv.DictReader(people_csv)
+```
+
+We can iterate over the `people_reader` reader object and print the results to better visualise the dictionaries. The stored dictionaries are sometimes referred to as *rows*.
+
+```Python
+{"id": "1", "name": "Alice", "age": "20"}
+{"id": "2", "name": "Freddie", "age": "21"}
+{"id": "3", "name": "Bob", "age": "17"}
+```
+
+Note that CSV files can use delimiters other than a comma, despite the name. This can be specified using the `delimiter` keyword argument.
+
+```Python
+csv.DictReader(another_csv, delimiter=';')
+```
+
+#### Writing
+
+Consider a list of dictionaries, named `big_list`, which is defined as follows:
+
+```Python
+big_list = [{"id": "1", "name": "Alice", "age": "20"},
+{"id": "2", "name": "Freddie", "age": "21"},
+{"id": "3", "name": "Bob", "age": "17"}]
+```
+
+The `DictWriter` class from the `csv` module can be used to write to a (new) CSV file. We can specify the fields by passing the keyword argument `fieldnames=fields`, where `fields` should contain the keys from our list of dictionaries. This needs to be followed by using the `writeheader()` method on the writer object to pass the fields to the first row (i.e. creating the header), and then the `writerow()` method to write the rest of the information to the CSV file.
+
+```Python
+import csv
+
+with open('output.csv', 'w') as output_csv:
+	fields = ["id", "name", "age"]
+	output_writer = csv.DictWriter(output_csv, fieldnames=fields)
+	output_writer.writeheader()
+	
+	for item in big_list:
+		output_writer.writerow(item)
+```
+
+### JSON Files
+
+JSON (JavaScript Object Notation) files are another common file type in which data is stored. Since the format of a JSON file is similar to a CSV file, the handling of one is also similar.
+
+#### Reading
+
+Consider a JSON file, named `purchase_14781239.json`, which contains the following information:
+
+```
+{
+  'user': 'ellen_greg',
+  'action': 'purchase',
+  'item_id': '14781239',
+}
+```
+The `load()` method from the `json` module can be used to convert the JSON file into a dictionary.
+
+```Python
+import json
+
+with open('purchase_14781239.json') as purchase_json
+	purchase_data = json.load(purchase_json)
+```
+
+#### Writing
+
+Consider a dictionary, named `turn_to_json`, which is defined as follows:
+
+```Python
+turn_to_json = {"user": "ellen_greg",
+"action": "purchase",
+"item_id": "14781239"}
+```
+
+The `dump()` method from the `json` module can be used to write to a (new) JSON file. The method takes two arguments: first the data object, and then the file object to write to.
+
+```Python
+import json
+
+with open('output.json', 'w') as json_file:
+	json.dump(turn_to_json, json_file)
+```
