@@ -106,7 +106,7 @@ x = x + 1  # Compensate for border
 As a comparison, the following should be avoided:
 
 ```Python
-x = x + 1 # Compensates for border
+x = x + 1  # Compensates for border
 ```
 
 #### Block Comments
