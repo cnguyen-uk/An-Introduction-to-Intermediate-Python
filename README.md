@@ -67,7 +67,7 @@ The `zip()` function can be used to aggregate iterables together. The length of 
 list_a = [1, 2, 3, 4]
 list_b = ["a", "b", "c"]
 
-list_c = zip(list_a, list_b)  # Prints: [(1, "a"), (2, "b"), (3, "c")]
+list_c = zip(list_a, list_b)  # Print: [(1, "a"), (2, "b"), (3, "c")]
 ```
 
 ### Using `in` With `print()`
@@ -75,8 +75,8 @@ list_c = zip(list_a, list_b)  # Prints: [(1, "a"), (2, "b"), (3, "c")]
 The `in` keyword can be used with the `print()` function to determine if a letter or substring exists in a string.
 
 ```Python
-print("abc" in "abcdef")  # Prints: True
-print("abc" in "uvwxyz")  # Prints: False
+print("abc" in "abcdef")  # Print: True
+print("abc" in "uvwxyz")  # Print: False
 ```
 
 ### List Comprehension
