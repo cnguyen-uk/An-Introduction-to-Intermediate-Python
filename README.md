@@ -67,7 +67,8 @@ The `zip()` function can be used to aggregate iterables together. The length of 
 list_a = [1, 2, 3, 4]
 list_b = ["a", "b", "c"]
 
-list_c = zip(list_a, list_b)  # Print: [(1, "a"), (2, "b"), (3, "c")]
+list_c = zip(list_a, list_b)
+print(list_c)  # Print: [(1, "a"), (2, "b"), (3, "c")]
 ```
 
 ### Using `in` With `print()`
