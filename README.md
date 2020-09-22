@@ -36,7 +36,16 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [JSON Files](#json-files)
     + [Reading](#reading-1)
     + [Writing](#writing-1)
-
+- [Advanced Function Arguments](#advanced-function-arguments)
+  * [Definitions](#definitions)
+  * [Default Arguments](#default-arguments)
+  * [Mutable Default Arguments](#mutable-default-arguments)
+  * [Positional and Keyword Arguments](#positional-and-keyword-arguments)
+  * [Unpacking Multiple Returns](#unpacking-multiple-returns)
+  * [Positional and Keyword Argument Unpacking](#positional-and-keyword-argument-unpacking)
+  * [Parameter and Argument Order](#parameter-and-argument-order)
+  * [Passing Containers as Arguments](#passing-containers-as-arguments)
+  
 ## Quick Useful Python
 
 This section contains some quick useful pieces of Python which may not have been covered in a basic Python course.
@@ -427,4 +436,159 @@ import json
 
 with open('output.json', 'w') as json_file:
 	json.dump(turn_to_json, json_file)
+```
+
+## Advanced Function Arguments
+
+It's impossible to use Python without arguments so it's safe to say that every Python user knows how to use them. However, it is possible to use Python without knowing about some of the finer details which are offered by Python's expressive function syntax. In fact, earlier in this guide there was some use of default arguments [here](#multi-line-docstrings) and keyword arguments [here](#csv-files).
+
+### Definitions
+
+Although some terms such as "argument" and "parameter" are used interchangeably in regular conversation, it helps to be precise with them for this section to make the most sense.
+
+- A *function definition* begins with def and contains the entire following indented block.
+- A *function call* is the place a function is invoked, with parentheses, after its definition.
+- A *function signature* consists of the information between the initial parentheses in a function definition.
+- A *parameter* is a variable in the function definition.
+- An *argument* is the value being passed into a function call.
+
+### Default Arguments
+
+If two parameters are defined in a function definition, then when the function is called we must pass exactly two arguments. These are called *required parameters* or *positional parameters*.
+
+By contrast, a *default argument* is an argument which may optionally be passed when a function is called, and defaults to a defined value otherwise. Note that any default values for parameters must be listed *after* any required parameters in a function signature. Sometimes these parameters are called *keyword parameters*.
+
+Default arguments can be allowed by making their corresponding parameters have a default value. In the following example the first function call returns `4374` and the second function call returns `3`:
+
+```Python
+def example_function(x, y = 7, z = 2):
+	return (x**y)*z
+
+example_function(3)
+example_function(1, 5, 3)
+```
+
+### Mutable Default Arguments
+
+Unless there is a good reason to, **do not use mutable default arguments**. The following example demonstrates why:
+
+```Python
+def list_add(num, lst = []):
+	lst.append(num)
+	return lst
+
+print(list_add(3))  # Print: [3]
+print(list_add(4))  # Print: [3, 4], not [4]
+print(list_add(5))  # Print: [3, 4, 5], not [5]
+```
+
+For a discussion on why this happens, see [here](https://stackoverflow.com/questions/1132941/least-astonishment-and-the-mutable-default-argument). To avoid this, simply use immutable default arguments. If we need to use an empty version of a data type, then we can use `None` as a sentinel.
+
+The following example is the correct way to do the previous example:
+
+```Python
+def list_add(num, lst = None):
+	if lst is None:
+		lst = []
+	lst.append(num)
+	return lst
+```
+
+### Positional and Keyword Arguments
+
+Typically when a function is called, we must pass arguments in the order in which the parameters are listed in the function signature. These passed arguments are called *positional arguments*.
+
+If we want to pass arguments in any order, then we need to explicitly pass the name of parameters as arguments (along with their values). These explicitly named arguments are called *keyword arguments*.
+
+Similar to function signatures, passing arguments in function calls must be done with keyword arguments *after* any positional arguments.
+
+In the following example the first function call returns `12`,  the second function call returns `3`, and the third function call returns `128`:
+
+```Python
+def example_function(x, y = 7, z = 2):
+	return (x**y)*z
+
+example_function(3, z = 4, y = 1)
+example_function(x = 3)
+example_function(y = 3, x = 4, z = 2)
+```
+
+### Unpacking Multiple Returns
+
+Functions can be made to return multiple pieces of data by separating them with a comma in the `return` statement. These are then stored in a tuple which can be indexed into. Alternatively, we can *unpack* the function return into separate variables, separated with a comma, in a single line.
+
+The following example demonstrates this:
+
+```Python
+def example_function(x, y):
+	sum_nums = x + y
+	mult_nums = x*y
+	return sum_nums, mult_nums
+
+print(example_function(2, 5))  # Print: (7, 10)
+
+sum_variable, mult_variable = example_function(2, 5)  # Unpack
+print(sum_variable)  # Print: 7
+print(mult_variable)  # Print: 10
+```
+
+### Positional and Keyword Argument Unpacking
+
+If we want to allow for an indefinite number of arguments to be passed at function call, then we can use *argument unpacking*. For positional arguments this is called *positional argument unpacking*. Similarly, for keyword arguments this is called *keyword argument unpacking*.
+
+To use positional argument unpacking, we use a parameter, typically `args` (by standard practice), suffixed by `*` in our function signature. Passed positional arguments will be packed into a tuple and stored in this parameter, which we can then interact with in the function definition. In this case, we call `*args` an *unpacked positional parameter*.
+
+The following example prints each word in upper case:
+
+```Python
+def exclamation(*args):
+	for argument in args:  # Unpack
+		print(argument.upper())
+
+exclamation("hello", "world", "goodbye", "boredom")
+```
+
+Similarly, to use keyword argument unpacking, we use a parameter, typically `kwargs`, suffixed by `**` in our function signature. Passed keyword arguments will be packed into a dictionary and stored in this parameter, which we can then interact with in the function definition (see the [Dictionary Methods section](#dictionary-methods)). In this case, we call `**kwargs` an *unpacked keyword parameter*.
+
+The following example prints the value of a particular keyword argument:
+
+```Python
+def bills(**kwargs):
+	print(kwargs.get("owed"))
+
+bills(name = "Alice", city = "London", owed = 900)  # Print: 900
+```
+
+### Parameter and Argument Order
+
+We can use a mix of all of the previously mentioned types of parameters, but this must be done in a particular order in the function signature:
+- All non-unpacked positional parameters.
+- An unpacked positional parameter.
+- All non-unpacked keyword parameters.
+- An unpacked keyword parameter.
+
+Of course, any arguments passed into the function call must also follow this order.
+
+### Passing Containers as Arguments
+
+Recall that Python's container datatypes are: dictionary, list, set, and tuple.
+
+Even if a function doesn't accept containers, we can pass them into the function call by deconstructing them in the call.
+
+For functions which accept positional arguments, we can pass lists, sets, or tuples, by suffixing the container with `*` in the function call. The following example demonstrates this:
+
+```Python
+def addition(x, y, z):
+	return x + y + z
+
+print(addition(*[4, 9, 1]))  # Print: 14
+```
+
+For functions which accept keyword arguments, we can pass dictionaries by suffixing the container with `**` in the function call. The following example demonstrates this:
+
+```Python
+def powerful_addition(x = 7, y = 2, z = 5):
+	return (x**y) + z
+
+print(powerful_addition(**{"x": 3, "y": 5, "z": 9}))  # Print: 252
 ```
