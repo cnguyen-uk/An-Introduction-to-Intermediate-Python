@@ -107,7 +107,7 @@ Every Python course will cover how to comment, but not every course will discuss
 
 #### Inline Comments
 
-Inline comments should be used sparingly and not state the obvious. They should be separated by at least two spaces from the code and use descriptive language rather than commanding. For example, the following is preferred:
+Inline comments should be used sparingly and not state the obvious. They should be separated by at least two spaces from the code and use commanding language rather than descriptive. For example, the following is preferred:
 
 ```Python
 x = x + 1  # Compensate for border
