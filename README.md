@@ -56,16 +56,16 @@ It is generally better to handle exceptions but not letting them occur in the fi
 
 ```Python
 def division(x, y):
-	return x/y
+    return x/y
 
 try:
-	division(3, 0)
+    division(3, 0)
 except ZeroDivisionError:
-	print("You cannot divide by zero")
+    print("You cannot divide by zero")
 except:
-	print("Something else went wrong")
+    print("Something else went wrong")
 finally:
-	print("The try/except block has finished")
+    print("The try/except block has finished")
 ```
 
 ### Aggregating Iterables
@@ -128,7 +128,7 @@ Block comments should be written in complete sentences, be indented with the cod
 #
 # It's quite a nice function.
 def triple(x):
-	return 3*x
+    return 3*x
 ```
 
 ### Docstrings
@@ -143,16 +143,16 @@ One-line docstrings are for obvious cases. There should not be a blank line befo
 
 ```Python
 def triple(x)
-	"""Return the triple of a number."""
-	return 3*x
+    """Return the triple of a number."""
+    return 3*x
 ```
 
 As a comparison, the following should be avoided:
 
 ```Python
 def triple(x)
-	"""Returns the triple of a number."""
-	return 3*x
+    """Returns the triple of a number."""
+    return 3*x
 ```
 
 #### Multi-Line Docstrings
@@ -161,14 +161,14 @@ Multi-line docstrings begin with a summary line, on the same line as the startin
 
 ```Python
 def power(x, y=2, z=4)
-	"""Raise x to the power of y, then multiply by 4.
-	
-	Arguments:
-	x -- the base number
-	y -- the exponent (default 2)
-	z -- the multiplier (default 4)
-	"""
-	return x**y
+    """Raise x to the power of y, then multiply by 4.
+    
+    Arguments:
+    x -- the base number
+    y -- the exponent (default 2)
+    z -- the multiplier (default 4)
+    """
+    return x**y
 ```
 
 ## Modules
@@ -304,7 +304,7 @@ The `with` keyword creates a context manager, i.e. an indented block which can b
 
 ```Python
 with open('document.txt') as doc_name:
-	doc_name.method()
+    doc_name.method()
 ```
 
 ### Methods
@@ -354,7 +354,7 @@ The `DictReader` class from the `csv` module can be used to convert each line in
 import csv
 
 with open('people.csv', newline='') as people_csv:
-	people_reader = csv.DictReader(people_csv)
+    people_reader = csv.DictReader(people_csv)
 ```
 
 We can iterate over the `people_reader` reader object and print the results to better visualise the dictionaries. The stored dictionaries are sometimes referred to as *rows*.
@@ -387,12 +387,12 @@ The `DictWriter` class from the `csv` module can be used to write to a (new) CSV
 import csv
 
 with open('output.csv', 'w') as output_csv:
-	fields = ["id", "name", "age"]
-	output_writer = csv.DictWriter(output_csv, fieldnames=fields)
-	output_writer.writeheader()
-	
-	for item in big_list:
-		output_writer.writerow(item)
+    fields = ["id", "name", "age"]
+    output_writer = csv.DictWriter(output_csv, fieldnames=fields)
+    output_writer.writeheader()
+    
+    for item in big_list:
+        output_writer.writerow(item)
 ```
 
 ### JSON Files
@@ -405,9 +405,9 @@ Consider a JSON file, named `purchase_14781239.json`, which contains the followi
 
 ```
 {
-  'user': 'ellen_greg',
-  'action': 'purchase',
-  'item_id': '14781239',
+    'user': 'ellen_greg',
+    'action': 'purchase',
+    'item_id': '14781239',
 }
 ```
 The `load()` method from the `json` module can be used to convert the JSON file into a dictionary.
@@ -416,7 +416,7 @@ The `load()` method from the `json` module can be used to convert the JSON file 
 import json
 
 with open('purchase_14781239.json') as purchase_json
-	purchase_data = json.load(purchase_json)
+    purchase_data = json.load(purchase_json)
 ```
 
 #### Writing
@@ -435,7 +435,7 @@ The `dump()` method from the `json` module can be used to write to a (new) JSON 
 import json
 
 with open('output.json', 'w') as json_file:
-	json.dump(turn_to_json, json_file)
+    json.dump(turn_to_json, json_file)
 ```
 
 ## Advanced Function Arguments
@@ -462,7 +462,7 @@ Default arguments can be allowed by making their corresponding parameters have a
 
 ```Python
 def example_function(x, y = 7, z = 2):
-	return (x**y)*z
+    return (x**y)*z
 
 example_function(3)
 example_function(1, 5, 3)
@@ -474,8 +474,8 @@ Unless there is a good reason to, **do not use mutable default arguments**. The 
 
 ```Python
 def list_add(num, lst = []):
-	lst.append(num)
-	return lst
+    lst.append(num)
+    return lst
 
 print(list_add(3))  # Print: [3]
 print(list_add(4))  # Print: [3, 4], not [4]
@@ -488,10 +488,10 @@ The following example is the correct way to do the previous example:
 
 ```Python
 def list_add(num, lst = None):
-	if lst is None:
-		lst = []
-	lst.append(num)
-	return lst
+    if lst is None:
+        lst = []
+    lst.append(num)
+    return lst
 ```
 
 ### Positional and Keyword Arguments
@@ -506,7 +506,7 @@ In the following example the first function call returns `12`,  the second funct
 
 ```Python
 def example_function(x, y = 7, z = 2):
-	return (x**y)*z
+    return (x**y)*z
 
 example_function(3, z = 4, y = 1)
 example_function(x = 3)
@@ -521,9 +521,9 @@ The following example demonstrates this:
 
 ```Python
 def example_function(x, y):
-	sum_nums = x + y
-	mult_nums = x*y
-	return sum_nums, mult_nums
+    sum_nums = x + y
+    mult_nums = x*y
+    return sum_nums, mult_nums
 
 print(example_function(2, 5))  # Print: (7, 10)
 
@@ -542,8 +542,8 @@ The following example prints each word in upper case:
 
 ```Python
 def exclamation(*args):
-	for argument in args:  # Unpack
-		print(argument.upper())
+    for argument in args:  # Unpack
+        print(argument.upper())
 
 exclamation("hello", "world", "goodbye", "boredom")
 ```
@@ -554,7 +554,7 @@ The following example prints the value of a particular keyword argument:
 
 ```Python
 def bills(**kwargs):
-	print(kwargs.get("owed"))
+    print(kwargs.get("owed"))
 
 bills(name = "Alice", city = "London", owed = 900)  # Print: 900
 ```
@@ -579,7 +579,7 @@ For functions which accept positional arguments, we can pass lists, sets, or tup
 
 ```Python
 def addition(x, y, z):
-	return x + y + z
+    return x + y + z
 
 print(addition(*[4, 9, 1]))  # Print: 14
 ```
@@ -588,7 +588,7 @@ For functions which accept keyword arguments, we can pass dictionaries by suffix
 
 ```Python
 def powerful_addition(x = 7, y = 2, z = 5):
-	return (x**y) + z
+    return (x**y) + z
 
 print(powerful_addition(**{"x": 3, "y": 5, "z": 9}))  # Print: 252
 ```
