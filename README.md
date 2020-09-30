@@ -45,6 +45,29 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Positional and Keyword Argument Unpacking](#positional-and-keyword-argument-unpacking)
   * [Parameter and Argument Order](#parameter-and-argument-order)
   * [Passing Containers as Arguments](#passing-containers-as-arguments)
+- [Object-Oriented Programming](#object-oriented-programming)
+  * [Classes, Objects and Methods](#classes-objects-and-methods)
+    + [Types](#types)
+    + [Classes](#classes)
+    + [Instantiation](#instantiation)
+    + [Objects](#objects)
+    + [Class Variables](#class-variables)
+    + [Instance Variables](#instance-variables)
+    + [Attributes](#attributes)
+    + [Methods](#methods)
+    + [Dunder Methods](#dunder-methods)
+      - [Constructors](#constructors)
+      - [String Representation](#string-representation)
+    + [Using `self`](#using-self)
+    + [(Almost) Everything is an Object](#almost-everything-is-an-object)
+    + [Abstraction and Encapsulation](#abstraction-and-encapsulation)
+  * [Inheritance and Polymorphism](#inheritance-and-polymorphism)
+    + [Inheritance](#inheritance)
+    + [Overriding](#overriding)
+    + [The `super()` Function](#the-super-function)
+    + [The `Exception` Class](#the-exception-class)
+    + [Interfaces](#interfaces)
+    + [Polymorphism](#polymorphism)
   
 ## Quick Useful Python
 
@@ -597,4 +620,487 @@ def powerful_addition(x = 7, y = 2, z = 5):
     return (x**y) + z
 
 print(powerful_addition(**{"x": 3, "y": 5, "z": 9}))  # Print: 252
+```
+
+## Object-Oriented Programming
+
+Most initial users of Python create and implement their programs using functional factors, i.e. variables and functions are the central elements of the code. This is known as *functional programming* and uses the [*declarative programming model*](https://en.wikipedia.org/wiki/Declarative_programming). This section will be about another programming paradigm called *Object-Orient Programming (OOP)* which uses the [*imperative programming model*](https://en.wikipedia.org/wiki/Imperative_programming). In OOP the central elements are *objects* and methods.
+
+There are four principles of OOP: abstraction, encapsulation, inheritance, and polymorphism. The first two are briefly discussed in [this section](#abstraction-and-encapsulation), and the final two are covered in more detail in [this section](#inheritance-and-polymorphism).
+
+OOP can prove initially tricky to grasp, especially if only functional programming has been seen before. However, the main benefit of OOP is the structure that it offers, thereby allowing for programming projects that span multiple lines of code (and possibly collaborators) to be organised, understood, and developed in a more systematic way than would have been possible with only functional programming.
+
+### Classes, Objects and Methods
+
+We will now introduce several definitions and concepts which are core to OOP.
+
+#### Types
+
+Recall that Python has different data types such as `float`,` int`, `list` and `dict`, and that these are often stored in variables. The type of a Python variable can be checked using the `type()` function. A variable's type determines what we can do with it, and interactions with variables are defined at the type level. For example, we can't use the `.get()` method on an `int`, nor can we use `+` on two variables with the `dict` data type.
+
+#### Classes
+
+A *class* is a template for a data type, i.e. creating a class allows you to create your own data type, including the kind of information that it can hold and the possible interactions.
+
+To define a class, use the `class` keyword. The class name should be written in PascalCase (following the PEP 8 style guide [here](https://www.python.org/dev/peps/pep-0008/#class-names)).
+
+```Python
+class RandomClass:
+    # The body of the class goes here.
+```
+
+#### Instantiation
+
+For functions to be used, they must be called. Similarly, for classes to be used, they must be *instantiated*, i.e. we must create an *instance* of the class. This can be done as follows:
+
+```Python
+RandomClass()
+```
+
+Rather than simply instantiating a class, it is often more useful to store the instance in a variable for later access. Hence, the following is preferred:
+
+```Python
+random_instance = RandomClass()
+```
+
+#### Objects
+
+An *object* is a collection of variables, and methods that can act on those variables. A class instance is an example of an object (we will soon define methods within classes). In particular, instantiation is the process of turning a class into an object.
+
+When applied to an object, the `type()` function is essentially the converse of instantiation - it turns an object into a class. Consider the following example:
+
+```Python
+print(type(random_instance))  # Print: <class '__main__.RandomClass'>
+```
+
+Here `__main__` means the file that is currently being run, so the printout means that `random_instance` is an instance of the class `RandomClass`that was defined in the file that is currently being run.
+
+#### Class Variables
+
+A *class variable* is a variable that is the same for every instance of the class. This can be defined within the body of the class, and then accessed using the `object.class_variable` syntax. The following example demonstrates this:
+
+```Python
+class RaceCar:
+    speed = "Very fast"
+
+ferrari = RaceCar()
+mercedes = RaceCar()
+
+print(ferrari.speed)  # Print: Very fast
+print(mercedes.speed)  # Print: Very fast
+```
+
+#### Instance Variables
+
+An *instance variable* is a variable specific to the class instance which it is attached to. This is in contrast to a class variable. Accessing an instance variable is done by using the `object.instance_variable` syntax. The following example demonstrates this.
+
+```Python
+class MathsFormula:
+    pass
+
+formula1 = MathsFormula()
+formula2 = MathsFormula()
+
+formula1.length = "Quite long"
+formula2.length = "Extremely short"
+
+print(formula1.length)  # Print: Quite long
+print(formula2.length)  # Print: Extremely short
+```
+
+#### Attributes
+
+An *attribute* is an umbrella term for both class variables and instance variables. Notice that the syntax for accessing either a class or instance variable are essentially identical.
+
+Attempting to access a non-existent attribute of an object will throw an `AttributeError`. To safely access attributes, we can use the `getattr()` function which allows us to pass an optional argument which specifies what to return if the attribute doesn't exist (instead of throwing an `AttributeError`).
+
+```Python
+getattr(some_instance, "random_attribute", 42)  # Default print: 42
+```
+
+If we just want to check if the attribute exists, then we can use the `hasattr()` function, which returns `True` if the attribute exists, and `False` otherwise.
+
+```Python
+hasattr(some_instance, "random_attribute")
+```
+
+The `dir()` function can be used to return a list of all of an object's attributes, including [dunder methods](#dunder-methods) (covered in a later section).
+
+```Python
+print(dir(object_name))  # Print a long list of all attributes
+```
+
+#### Methods
+
+A *method* is a function defined as part of a class. The first parameter in a method signature will always refer to the object that is calling the method, and this is implicitly and automatically passed when the method is called. By convention, this parameter is named `self`.
+
+Methods are defined similarly to functions, but must be indented as part of a class.
+
+```Python
+class RaceCar:
+    def fuel(self):
+        print("Not enough!")
+
+mclaren = RaceCar()
+mclaren.fuel()  # Print: Not enough!
+```
+
+If our class has a class variable, then we refer to it within the body of the class using the `self.class_variable` syntax.
+
+```Python
+class Circle:
+    pi = 3.14
+	
+    def important_number(self):
+        print("The important number is:", self.pi)
+
+shape = Circle()
+shape.important_number()  # Print: The important number is: 3.14
+```
+
+Similarly, if we wanted to call a method within the same class, then we would use the `self.method` syntax.
+
+Notice that accessing an attribute and calling a method uses essentially the same syntax of `object.attribute_or_method`. This general syntax also covers the usage of `self` since it refers to an object.
+
+Method signatures can accept more parameters than just `self`. The following example demonstrates this:
+
+```Python
+class Square:
+    def area(self, length):
+        return length**2
+
+shape = Square()
+print(shape.area(3))  # Print: 9
+```
+
+#### Dunder Methods
+
+In addition to defining our own methods in classes, we can use Python's special methods which are wrapped in double-underscores `__`. These special methods are referred to as `magic methods` or `dunder methods` (an abbreviation from double-underscore method). Dunder methods can be used to enrich class behaviour and behave differently from regular methods.
+
+In this section we will look at the `__init__` and `__repr__` dunder methods, but the full list of dunder methods can be found [here](https://docs.python.org/3/reference/datamodel.html#special-method-names).
+
+##### Constructors
+
+A *constructor* is a method which is called when a class is instantiated. In Python this usually refers to the `__init__` dunder method which initialises a class instance in a way that we define. In particular, the dunder method is called every time the class is instantiated. The following example demonstrates this:
+
+```Python
+class RaceCar:
+    def __init__(self):
+        print("vrooooom")
+
+ferrari = RaceCar()  # Print: vrooooom
+mercedes = RaceCar()  # Print: vrooooom
+```
+
+We may also pass arguments when a class is instantiated. These arguments will be passed to `__init__`. Modifying the above example:
+
+```Python
+class RaceCar:
+    def __init__(self, car_name):
+        print("vrooooom goes the", car_name)
+
+ferrari = RaceCar("Ferrari")  # Print: vrooooom goes the Ferrari
+mercedes = RaceCar("Mercedes")  # Print: vrooooom goes the Mercedes
+```
+
+##### String Representation
+
+The `print()` function is extremely useful for debugging code, so classes should be created with this in mind. However, using `print()` on an object that has been created from a class instance returns the default string representation `<__main__.class_name object at memory_location>`, which isn't particularly useful for debugging.
+
+To resolve this issue, we can use the `__repr__` dunder method which allows us to define the string representation. This dunder method can only have `self` as its parameter and must return a string.  Modifying the previous example:
+
+```Python
+class RaceCar:
+    def __init__(self, car_name):
+        self.name = car_name  # Create an instance variable
+
+    def __repr__(self):
+        return "This car is a " + self.name
+
+ferrari = RaceCar("Ferrari")
+print(ferrari)  # Print: This car is a Ferrari
+```
+
+Our above usage of `self` within the `__init__` dunder method will be discussed in the next section.
+
+#### Using `self`
+
+We have already seen that we can create instance variables outside of the indented block of class code. It can sometimes be useful to create instance variables upon class instantiation by using the constructor. For example, if we can guarantee rigidity to the data that an object holds, such as a name or URL, then this may be desirable for convenience and code readability.
+
+We have already seen an example of this in the previous section. Here we also present another example for the scenario where we create instance variables of some properties of some squares.
+
+```Python
+class Square:
+    def __init__(self, length):
+        self.length = length
+        self.area = self.length**2
+        self.perimeter = self.length*4
+
+small_square = Square(2)
+big_square = Square(10)
+
+print(small_square.length)  # Print: 2
+print(big_square.perimeter)  # Print: 40
+print(small_square.area)  # Print: 4
+```
+
+Of course, we could have just created an area and perimeter method to produce the same result, but for some simple shape properties this is a more sensible and meaningful approach which reduces on code bloat.
+
+#### (Almost) Everything is an Object
+
+With the initial introduction to OOP out of the way, we can now go deeper with some of this programming paradigm's concepts. The interested reader is free to do their own research on the new terminology and concepts used in this section - some hyperlinks will be available to guide this.
+
+So far we have seen the following definition:
+
+<p align="center">
+An <i>object</i> is a collection of variables, and methods that can act on those variables.
+</p>
+
+In fact, a more general statement is true - objects are Python's [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)#Abstraction_in_object_oriented_programming) for data, and all data in a Python program are represented either by objects or by relations between objects (see the [documentation](https://docs.python.org/3/reference/datamodel.html)). In other words, objects allow users to interact with data and use it without needing to actually know about the the underlying mechanics of the data itself.
+
+Furthermore, functions and methods are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen). In particular, methods are [function objects](https://docs.python.org/3/c-api/method.html#method-objects) (also called [*functors*](https://en.wikipedia.org/wiki/Function_object)).
+
+We have also seen the following definition:
+
+<p align="center">
+A <i>class</i> is a template for a data type, i.e. creating a class allows you to create your own data type, including the kind of information that it can hold and the possible interactions.
+</p>
+
+Again, a more general statement is true - a class is a code template for creating objects (see the [documentation](https://docs.python.org/3/tutorial/classes.html)).
+
+#### Abstraction and Encapsulation
+
+It is impossible to talk about objects and classes without briefly talking about abstraction and encapsulation. We will discuss both of these OOP principles from the perspective of Python. However, the interested reader can use the hyperlinks for a more general read.
+
+[*Abstraction*](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) refers to hiding the real implementation and complexity of an object within a class or interface (covered [later](#interfaces)), while only showing the essential features of the object such that a user only needs to know how to use it. A real world example would be a car (the object) not requiring the driver (the user) to actually understand the underlying mechanics to operate it.
+
+[*Encapsulation*](https://en.wikipedia.org/wiki/Encapsulation_(computer_programming)) refers to the bundling of objects and relations between them, often to protect the code from external access. Examples of this include classes and modules.
+
+### Inheritance and Polymorphism
+
+In this section we will cover the two remaining principles of OOP in detail. The [inheritance](https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)) and [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)) hyperlinks can be used to  guide a more general read on these principles.
+
+#### Inheritance
+
+*Inheritance* is where a class acquires the properties of another class. The class which does the acquiring is called the *child class* or *subclass*, and the class being acquired from is called the *parent class* or *base class*. This is useful when we want to create a new class that will simply be a variant of an existing class.
+
+In the following example, the `UnitCircle` class is the parent class, and the `LargeCircle` class is the child class which adds the `colour` class variable:
+
+```Python
+class UnitCircle:
+    pi = 3.14
+    radius = 1
+	
+    def __init__(self):
+        self.area = self.pi*(self.radius**2)
+        self.perimeter = 2*self.pi*self.radius
+
+class GreenCircle(UnitCircle):
+    colour = "Green"
+```
+
+Note that we may also add new methods in this way.
+
+The `issubclass()` function can be used to check if one class is a subclass of another class. It returns `True` if the first argument is a subclass of the second argument, and `False` otherwise. The general syntax is as follows:
+
+```Python
+issubclass(ChildClass, ParentClass)
+```
+
+#### Overriding
+
+As seen in the previous section, new class variables and methods can be added to a parent class to create a child class via inheritance. These can also be completely redefined for the child class by doing an *override*.
+
+In the following simple example, the `DoubleUnitCube` class is the parent class, and the `DoubleUnitSquare` class is the child class with the `dimensions` class variable overridden, and the `ImportantCalculation` method also overridden:
+
+```Python
+class DoubleUnitCube:
+    length = 2
+    dimensions = 3
+    
+    def ImportantCalculation(self):
+        volume = self.length**self.dimensions
+        return volume
+
+class DoubleUnitSquare(DoubleUnitCube):
+    dimensions = 2
+    
+    def ImportantCalculation(self):
+        area = self.length**self.dimensions
+        return area
+
+a_cube = DoubleUnitCube()
+a_square = DoubleUnitSquare()
+
+print(a_cube.ImportantCalculation())  # Print: 8
+print(a_square.ImportantCalculation())  # Print: 4
+```
+
+#### The `super()` Function
+
+If we just want to add extra logic to a pre-existing method, then we can use the `super()` function. This function calls a method from the parent class as a temporary object of the parent class. We call this temporary object a *proxy object*.
+
+In the following example the `Car` class is the parent class with a constructor which is built upon in the `SuperCar` class - the `weight` and `maximum_speed` instance variables are still created, but in addition to a new `turbo_boost` instance variable:
+
+```Python
+class Car:
+    def __init__(self, weight, maximum_speed):
+        self.weight = weight
+        self.maximum_speed = maximum_speed
+
+class SuperCar(Car):
+    def __init__(self, weight, maximum_speed, turbo_boost):
+       super().__init__(weight, maximum_speed)  # Call method as normal
+       self.turbo_boost = turbo_boost
+```
+
+#### The `Exception` Class
+
+Python has a built-in class called [`Exception`](https://docs.python.org/3/library/exceptions.html#Exception). All user-defined exceptions should inherit from this class. All built-in, non-system-exiting exceptions also inherit from this class. (There is also another class called [`BaseException`](https://docs.python.org/3/library/exceptions.html#BaseException) which is the base class for all built-in exceptions, but user-defined classes should not inherit from this.)
+
+The main benefit of allowing exceptions to inherit from one another is that we can choose to catch them at any level in our defined exception hierarchy. In the following example we create exceptions for starting a car:
+
+```Python
+class CarException(Exception):
+    pass
+
+class IgnitionException(CarException):
+    pass
+
+class SteeringException(CarException):
+    pass
+
+class GearboxException(CarException):
+    pass
+```
+
+In the above example, if we wanted to catch an exception with a `try` and `except` block, instead of having to catch `CarException`, `IgnitionException` and `GearboxException`, we could just catch `carException` instead depending on how granular we wish to be.
+
+Using an exception hierarchy allows for greater control over the level of preciseness we wish to have. For the built-in exceptions, the hierarchy can be seen in the documentation [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
+
+#### Interfaces
+
+Sometimes it can be useful to have different classes with differently implemented methods to use the same method name. This is especially useful when we want an object, regardless of which class it is an instance of, to perform the same type of task.
+
+In particular, classes are said to *implement the same interface* if they have the same method names and attributes. In Python, an *interface* refers to the names of the methods and the arguments that they take.
+
+The following example demonstrates this:
+
+```Python
+class Dog:
+    def print_animal(self):
+        print("This is a dog")
+
+class Husky(Dog):
+    def print_animal(self):
+        print("This is a Husky")
+
+animal_A = Dog()
+animal_B = Husky()
+
+animal_A.print_animal()  # Print: This is a dog
+animal_B.print_animal()  # Print: This is a Husky
+```
+
+For a more functional example, consider the following, where the `Chess` and `Checkers` classes implement the same interface, which we then use to do the same task of setting up a board game:
+
+```Python
+class Chess:
+    def __init__(self):
+        self.board = self.set_up_board()
+        self.pieces = self.add_pieces()
+        print("A game of chess is now ready to be played")
+
+    def set_up_board(self):
+        print("The chess board has been set up")
+
+    def add_pieces(self):
+        print("The chess pieces have been placed")
+
+    def play(self):
+        print("Now playing chess!")
+
+class Checkers:
+    def __init__(self):
+        self.board = self.set_up_board()
+        self.pieces = self.add_pieces()
+        print("A game of checkers is now ready to be played")
+
+    def set_up_board(self):
+        print("The checkers board has been set up")
+
+    def add_pieces(self):
+        print("The checkers pieces have been placed")
+
+    def play(self):
+        print("Now checkers chess!")
+
+def play_board_game(board_game):
+    board_game.play()
+
+chess_game = Chess()
+checkers_game = Checkers()
+another_chess_game = Chess()
+
+for board_game in [chess_game, checkers_game, another_chess_game]:
+    play_board_game(board_game)
+
+# Print the following:
+# The chess board has been set up
+# The chess pieces have been placed
+# A game of chess is now ready to be played
+# The checkers board has been set up
+# The checkers pieces have been placed
+# A game of checkers is now ready to be played
+# The chess board has been set up
+# The chess pieces have been placed
+# A game of chess is now ready to be played
+# Now playing chess!
+# Now checkers chess!
+# Now playing chess!
+```
+
+#### Polymorphism
+
+We've just seen that interfaces allow for flexibility in programming, but flexibility can also be introduced in other ways. For example, the `+` operator behaves differently depending on the data types that it is being used with, but does what we would intuitively expect it to do.
+
+*Polymorphism*  refers to the same syntax doing different actions depending on data type. This is a very general concept, but creating classes which implement the same interface is one way of introducing polymorphism into our code.
+
+Another way to introduce polymorphism is to use dunder methods such as `__add__` to make our classes act like what we are already familiar with (recall the [dunder methods](#dunder-methods) section).
+
+We will now look at an example which demonstrates the usefulness of dunder methods for adding intuition into code via polymorphism. Here we use the `__add__` dunder method to add together, using the `+` operator, two RGB colours (in the form of objects which are instances of the `Colour` class).
+
+```Python
+class Colour:
+    def __init__(self, red, green, blue):
+        self.red = red
+        self.green = green
+        self.blue = blue
+
+    def __repr__(self):
+        """Return the RGB colour code."""
+        return  "RGB = ({red}, {green}, {blue})".format(red = self.red,
+                                                        green = self.green,
+                                                        blue = self.blue)
+
+    def __add__(self, another_colour):
+        """Allow for A + B to be used, instead of only A.__add__(B)."""
+        red_value = min(self.red + another_colour.red, 255)
+        green_value = min(self.green + another_colour.green, 255)
+        blue_value = min(self.blue + another_colour.blue, 255)
+        return Colour(red_value, green_value, blue_value)
+
+red = Colour(255, 0, 0)
+blue = Colour(0, 255, 0)
+green = Colour(0, 0, 255)
+
+magenta = red + blue
+cyan = blue + green
+yellow = red + green
+white = red + green + blue
+
+print(magenta)  # Print: RGB = (255, 255, 0)
+print(cyan)  # Print: RGB = (0, 255, 255)
+print(yellow)  # Print: RGB = (255, 0, 255)
+print(white)  # Print: RGB = (255, 255, 255)
 ```
