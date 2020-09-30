@@ -68,6 +68,11 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
     + [The `Exception` Class](#the-exception-class)
     + [Interfaces](#interfaces)
     + [Polymorphism](#polymorphism)
+- [Decorators](#decorators)
+  * [Functions Within Functions](#functions-within-functions)
+  * [Decorating a Function](#decorating-a-function)
+  * [Using Decorators](#using-decorators)
+  * [Decorators with Parameters](#decorators-with-parameters)
   
 ## Quick Useful Python
 
@@ -1103,4 +1108,107 @@ print(magenta)  # Print: RGB = (255, 255, 0)
 print(cyan)  # Print: RGB = (0, 255, 255)
 print(yellow)  # Print: RGB = (255, 0, 255)
 print(white)  # Print: RGB = (255, 255, 255)
+```
+
+## Decorators
+
+A *decorator* or *decorator function*  is a special function which wraps existing functions to add extra functionality. These can be used in an extremely convenient way which make the reading and writing of our code easier.
+
+In this section we start with some motivation before actually looking at decorators so that the benefit of using decorators is obvious.
+
+### Functions Within Functions
+
+Recall that functions are objects (see [this](#almost-everything-is-an-object) section), which means that it is possible to return functions from functions. For example, the following is perfectly valid:
+
+```Python
+def add_or_subtract_operation(operation):
+    def add(x, y):
+        return x + y
+    def subtract(x, y):
+        return x - y
+    
+    if operation == "+":
+        return add
+    elif operation == "-":
+        return subtract
+```
+
+Note that in the above example, we return a **function** and not a **function call**.
+
+### Decorating a Function
+
+One way to decorate a function with additional functionality is to create a *wrapper function* which bundles the original function with additional functionality. In the following example, we create a decorator function `clean_decorator` which cleans an item:
+
+```Python
+def clean_decorator(item_function):
+    def wrapper():
+        print("A nice, clean and sparkly:")
+        item_function()
+    return wrapper
+
+def print_ferrari():
+    print("Ferrari")
+
+def print_book():
+    print("book")
+
+decorated_ferrari_function = clean_decorator(print_ferrari)
+decorated_book_function = clean_decorator(print_book)
+
+decorated_ferrari_function()
+# Print: A nice, clean and sparkly:
+#        Ferrari
+
+decorated_book_function()
+# Print: A nice, clean and sparkly:
+#        book
+```
+
+### Using Decorators
+
+We can simplify the syntax in the previous section by using decorators. Instead of having to tediously create a function formed from calling the decorator function, and then calling that function, we can instead just use `@decorator_function` on the line before the function that we wish to decorate. This usage of decorators via the `@` symbol is an example of [*syntactic sugar*](https://en.wikipedia.org/wiki/Syntactic_sugar), i.e. syntax designed to make things easier to read or express.
+
+Continuing from the previous example, our code can be simplified as follows:
+
+```Python
+def clean_decorator(item_function):
+    def wrapper():
+        print("A nice, clean and sparkly:")
+        item_function()
+    return wrapper
+
+@clean_decorator
+def print_ferrari():
+    print("Ferrari")
+
+@clean_decorator
+def print_book():
+    print("book")
+
+print_ferrari()
+print_book()
+```
+
+By abstracting away the underlying functions, it is now much clearer which functions we're actually interested in calling and decorating.
+
+### Decorators with Parameters
+
+So far we have been decorating functions defined without parameters. If we wish to have parameters in our function definitions, then we just need to ensure that these parameters are also accounted for in the wrapper function.
+
+In the following example, we modify the previous example to have a `print_item()` function:
+
+```Python
+def clean_decorator(item_function):
+    def wrapper(item_name):
+        print("A nice, clean and sparkly:")
+        item_function(item_name)
+    return wrapper
+
+@clean_decorator
+def print_item(item_name):
+    print(item_name)
+
+print_item("table")
+# Print: A nice, clean and sparkly:
+#        table
 ```
