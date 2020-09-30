@@ -294,6 +294,12 @@ list(dict.fromkeys(list_name))
 
 Of course, the elements of the initial list must be immutable, but some further tricks can be used. For example, if an element of the list is a list, then we can convert it into a tuple, remove any duplicates, and then convert that element back into a list again.
 
+Similar to a dictionary, sets must also contain unique elements. We can use this to achieve the same aim of removing duplicates from a list without even needing to worry about immutability.
+
+```Python
+list(set(list_name))
+```
+
 ## Files
 
 Python is commonly used as a scripting language in industrial automation. In particular, it is common to want to automate interaction with different file types.
