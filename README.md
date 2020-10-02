@@ -536,7 +536,7 @@ If we want to pass arguments in any order, then we need to explicitly pass the n
 
 Similar to function signatures, passing arguments in function calls must be done with keyword arguments *after* any positional arguments.
 
-In the following example the first function call returns `12`,  the second function call returns `3`, and the third function call returns `128`:
+In the following example the first function call returns `12`, the second function call returns `3`, and the third function call returns `128`:
 
 ```Python
 def example_function(x, y = 7, z = 2):
@@ -812,7 +812,7 @@ mercedes = RaceCar("Mercedes")  # Print: vrooooom goes the Mercedes
 
 The `print()` function is extremely useful for debugging code, so classes should be created with this in mind. However, using `print()` on an object that has been created from a class instance returns the default string representation `<__main__.class_name object at memory_location>`, which isn't particularly useful for debugging.
 
-To resolve this issue, we can use the `__repr__` dunder method which allows us to define the string representation. This dunder method can only have `self` as its parameter and must return a string.  Modifying the previous example:
+To resolve this issue, we can use the `__repr__` dunder method which allows us to define the string representation. This dunder method can only have `self` as its parameter and must return a string. Modifying the previous example:
 
 ```Python
 class RaceCar:
@@ -883,7 +883,7 @@ It is impossible to talk about objects and classes without briefly talking about
 
 ### Inheritance and Polymorphism
 
-In this section we will cover the two remaining principles of OOP in detail. The [inheritance](https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)) and [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)) hyperlinks can be used to  guide a more general read on these principles.
+In this section we will cover the two remaining principles of OOP in detail. The [inheritance](https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)) and [polymorphism](https://en.wikipedia.org/wiki/Polymorphism_(computer_science)) hyperlinks can be used to guide a more general read on these principles.
 
 #### Inheritance
 
@@ -979,7 +979,7 @@ class GearboxException(CarException):
     pass
 ```
 
-In the above example, if we wanted to catch an exception with a `try` and `except` block, instead of having to catch `CarException`, `IgnitionException` and `GearboxException`, we could just catch `carException` instead depending on how granular we wish to be.
+In the above example, if we wanted to catch an exception with a `try` and `except` block, instead of having to catch `CarException`, `IgnitionException` and `GearboxException`, we could just catch `CarException` instead depending on how granular we wish to be.
 
 Using an exception hierarchy allows for greater control over the level of preciseness we wish to have. For the built-in exceptions, the hierarchy can be seen in the documentation [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
 
@@ -1069,7 +1069,7 @@ for board_game in [chess_game, checkers_game, another_chess_game]:
 
 We've just seen that interfaces allow for flexibility in programming, but flexibility can also be introduced in other ways. For example, the `+` operator behaves differently depending on the data types that it is being used with, but does what we would intuitively expect it to do.
 
-*Polymorphism*  refers to the same syntax doing different actions depending on data type. This is a very general concept, but creating classes which implement the same interface is one way of introducing polymorphism into our code.
+*Polymorphism* refers to the same syntax doing different actions depending on data type. This is a very general concept, but creating classes which implement the same interface is one way of introducing polymorphism into our code.
 
 Another way to introduce polymorphism is to use dunder methods such as `__add__` to make our classes act like what we are already familiar with (recall the [dunder methods](#dunder-methods) section).
 
@@ -1112,7 +1112,7 @@ print(white)  # Print: RGB = (255, 255, 255)
 
 ## Decorators
 
-A *decorator* or *decorator function*  is a special function which wraps existing functions to add extra functionality. These can be used in an extremely convenient way which make the reading and writing of our code easier.
+A *decorator* or *decorator function* is a special function which wraps existing functions to add extra functionality. These can be used in an extremely convenient way which make the reading and writing of our code easier.
 
 In this section we start with some motivation before actually looking at decorators so that the benefit of using decorators is obvious.
 
