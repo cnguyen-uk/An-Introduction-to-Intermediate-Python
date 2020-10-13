@@ -190,7 +190,7 @@ Multi-line docstrings begin with a summary line, on the same line as the startin
 ```Python
 def power(x, y=2, z=4)
     """Raise x to the power of y, then multiply by 4.
-    
+
     Arguments:
     x -- the base number
     y -- the exponent (default 2)
@@ -424,7 +424,7 @@ with open('output.csv', 'w') as output_csv:
     fields = ["id", "name", "age"]
     output_writer = csv.DictWriter(output_csv, fieldnames=fields)
     output_writer.writeheader()
-    
+
     for item in big_list:
         output_writer.writerow(item)
 ```
@@ -755,7 +755,7 @@ If our class has a class variable, then we refer to it within the body of the cl
 ```Python
 class Circle:
     pi = 3.14
-	
+
     def important_number(self):
         print("The important number is:", self.pi)
 
@@ -895,7 +895,7 @@ In the following example, the `UnitCircle` class is the parent class, and the `L
 class UnitCircle:
     pi = 3.14
     radius = 1
-	
+
     def __init__(self):
         self.area = self.pi*(self.radius**2)
         self.perimeter = 2*self.pi*self.radius
@@ -922,14 +922,14 @@ In the following simple example, the `DoubleUnitCube` class is the parent class,
 class DoubleUnitCube:
     length = 2
     dimensions = 3
-    
+
     def ImportantCalculation(self):
         volume = self.length**self.dimensions
         return volume
 
 class DoubleUnitSquare(DoubleUnitCube):
     dimensions = 2
-    
+
     def ImportantCalculation(self):
         area = self.length**self.dimensions
         return area
@@ -1126,7 +1126,7 @@ def add_or_subtract_operation(operation):
         return x + y
     def subtract(x, y):
         return x - y
-    
+
     if operation == "+":
         return add
     elif operation == "-":
