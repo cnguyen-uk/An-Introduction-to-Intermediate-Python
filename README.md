@@ -80,7 +80,7 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
 
 ## Code Standards
 
-All written code should follow a style guide to ensure that standards are kept consistent across any codebase and make code easier to read. Badly written code is difficult to scale, optimise, and debug. Such is the importance of high code standards that this guide will discuss it as a separate section before any code is seen.
+All written code should follow a style guide to ensure that standards are kept consistent across any codebase and make code easier to read. Badly written code is difficult to scale, optimise, and debug. Such is the importance of high code standards that this guide will discuss it as a separate section before any code is seen. Any new terminology or concepts mentioned in this section will be properly covered later in the guide.
 
 We follow the standards in the [PEP 8 Style Guide](https://www.python.org/dev/peps/pep-0008/). In particular, this section will act as a reference for language-specific best practices for indentation, comments, quotes, and names, since these can vary across different programming languages.
 
