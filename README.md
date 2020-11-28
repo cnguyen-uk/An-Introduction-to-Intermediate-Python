@@ -9,17 +9,21 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
 
 ## Table of Contents
 
-- [Quick Useful Python](#quick-useful-python)
-  * [Handling Exceptions](#handling-exceptions)
-  * [Aggregating Iterables](#aggregating-iterables)
-  * [Using `in` With `print()`](#using-in-with-print)
-  * [List Comprehension](#list-comprehension)
+- [Coding Standards](#coding-standards)
+  * [Indentation](#indentation)
   * [Comments](#comments)
     + [Inline Comments](#inline-comments)
     + [Block Comments](#block-comments)
   * [Docstrings](#docstrings)
     + [One-Line Docstrings](#one-line-docstrings)
     + [Multi-Line Docstrings](#multi-line-docstrings)
+  * [Quotes](#quotes)
+  * [Names](#names)
+- [Quick Useful Python](#quick-useful-python)
+  * [Handling Exceptions](#handling-exceptions)
+  * [Aggregating Iterables](#aggregating-iterables)
+  * [Using `in` With `print()`](#using-in-with-print)
+  * [List Comprehension](#list-comprehension)
 - [Modules](#modules)
   * [Importing Particular Objects from a Module](#importing-particular-objects-from-a-module)
   * [Importing All Objects from a Module](#importing-all-objects-from-a-module)
@@ -73,7 +77,104 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Decorating a Function](#decorating-a-function)
   * [Using Decorators](#using-decorators)
   * [Decorators with Parameters](#decorators-with-parameters)
-  
+
+## Coding Standards
+
+All written code should follow a style guide to ensure that standards are kept consistent across any codebase and make code easier to read. Badly written code is difficult to scale, optimise, and debug. Such is the importance of high coding standards that this guide will discuss it as a separate section before any code is seen.
+
+We follow the standards in the [PEP 8 Style Guide](https://www.python.org/dev/peps/pep-0008/). In particular, this section will act as a reference for language-specific best practices for indentation, comments, quotes, and names, since these can vary across different programming languages.
+
+### Indentation
+
+The standard is to use four spaces for indented code.
+
+### Comments
+
+Every Python course will cover how to comment, but not every course will discuss good standards for commenting. Good standards are important for consistency and accessibility for whoever is reading the code. Best standards for comments can be read about in more detail [here](https://www.python.org/dev/peps/pep-0008/#comments).
+
+#### Inline Comments
+
+Inline comments should be used sparingly and not state the obvious. They should be separated by at least two spaces from the code and use commanding language rather than descriptive. For example, the following is preferred:
+
+```Python
+x = x + 1  # Compensate for border
+```
+
+As a comparison, the following should be avoided:
+
+```Python
+x = x + 1  # Compensates for border
+```
+
+#### Block Comments
+
+Block comments should be written in complete sentences, be indented with the code which it is commenting, and come *before* the code which it is commenting. Placing the comment after is merciless on a confused reader. Paragraphs are separated by a single line containing a single `#`, and multi-sentence comments should have two spaces after a sentence-ending period (except after the final sentence).
+
+```Python
+# This function triples a number.  It does not check for valid input.
+#
+# It's quite a nice function.
+def triple(x):
+    return 3*x
+```
+
+### Docstrings
+
+Similar but different to comments, a *docstring* is a string that appears as the first statement in a module, function, class, or method definition, and is used to document what they do. Docstrings are usually used for modules, and all classes and functions exported by that module.
+
+Docstrings should be wrapped with triple double quotes `""" """` and there should be a blank line after all docstrings that document a class. Best standards for docstrings can be read about in more detail [here](https://www.python.org/dev/peps/pep-0257/).
+
+#### One-Line Docstrings
+
+One-line docstrings are for obvious cases. There should not be a blank line before or after the docstring, and it should be a phrase ending in a period which prescribes the function or method's effect as a command, not as a description. For example, the following is preferred:
+
+```Python
+def triple(x)
+    """Return the triple of a number."""
+    return 3*x
+```
+
+As a comparison, the following should be avoided:
+
+```Python
+def triple(x)
+    """Returns the triple of a number."""
+    return 3*x
+```
+
+#### Multi-Line Docstrings
+
+Multi-line docstrings begin with a summary line, on the same line as the starting triple quotes, followed by a space, a more elaborate description, and then the ending triple quotes on a line by themselves. For example:
+
+```Python
+def power(x, y=2, z=4)
+    """Raise x to the power of y, then multiply by 4.
+
+    Arguments:
+    x -- the base number
+    y -- the exponent (default 2)
+    z -- the multiplier (default 4)
+    """
+    return x**y
+```
+
+### Quotes
+
+Whenever quotation marks are required in code, either consistently use double quotes `" "` or consistently use single quotes `' '` throughout the code. However, when a string contains double quotes or single quotes, then the choice of wrapping quotation marks should be such that the use of the escape character `\` is avoided.
+
+Quotation marks for triple-quoted strings should always use double quotes.
+
+### Names
+
+Unfortunately there is no convention for general names. However, in this section we list the convention for common types of names. Best standards for names can be read about in more detail [here](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
+
+- Modules: Use short snake_case names.
+- Packages: Use short lowercase names. Only use snake_case if necessary.
+- Classes: Use PascalCase.
+- Functions: Use snake_case.
+- Variables: Use snake_case.
+- Constants: Use uppercase. Any word separation should be done with an underscore `_`.
+
 ## Quick Useful Python
 
 This section contains some quick useful pieces of Python which may not have been covered in a basic Python course.
@@ -128,76 +229,6 @@ List comprehension allows for the creation of lists in a concise way. The basic 
 Expressions can be anything, and we can have as many `for` or `if` statements as we like, including zero.
 
 Set and dictionary comprehension works in the same way.
-
-### Comments
-
-Every Python course will cover how to comment, but not every course will discuss good standards for commenting. Good standards are important for consistency and accessibility for whoever is reading the code. Best standards for comments can be read about in more detail [here](https://www.python.org/dev/peps/pep-0008/#comments).
-
-#### Inline Comments
-
-Inline comments should be used sparingly and not state the obvious. They should be separated by at least two spaces from the code and use commanding language rather than descriptive. For example, the following is preferred:
-
-```Python
-x = x + 1  # Compensate for border
-```
-
-As a comparison, the following should be avoided:
-
-```Python
-x = x + 1  # Compensates for border
-```
-
-#### Block Comments
-
-Block comments should be written in complete sentences, be indented with the code which it is commenting, and come *before* the code which it is commenting. Placing the comment after is merciless on a confused reader. Paragraphs are separated by a single line containing a single `#`, and multi-sentence comments should have two spaces after a sentence-ending period (except after the final sentence).
-
-```Python
-# This function triples a number.  It does not check for valid input.
-#
-# It's quite a nice function.
-def triple(x):
-    return 3*x
-```
-
-### Docstrings
-
-Similar but different to comments, a docstring is a string that appears as the first statement in a module, function, class, or method definition, and is used to document what they do. Docstrings are usually used for modules, and all classes and functions exported by that module.
-
-Triple double quotes should be used around docstrings and there should be a blank line after all docstrings that document a class. Best standards for docstrings can be read about in more detail [here](https://www.python.org/dev/peps/pep-0257/).
-
-#### One-Line Docstrings
-
-One-line docstrings are for obvious cases. There should not be a blank line before or after the docstring, and it should be a phrase ending in a period which prescribes the function or method's effect as a command, not as a description. For example, the following is preferred:
-
-```Python
-def triple(x)
-    """Return the triple of a number."""
-    return 3*x
-```
-
-As a comparison, the following should be avoided:
-
-```Python
-def triple(x)
-    """Returns the triple of a number."""
-    return 3*x
-```
-
-#### Multi-Line Docstrings
-
-Multi-line docstrings begin with a summary line, on the same line as the starting triple quotes, followed by a space, a more elaborate description, and then the ending triple quotes on a line by themselves. For example:
-
-```Python
-def power(x, y=2, z=4)
-    """Raise x to the power of y, then multiply by 4.
-
-    Arguments:
-    x -- the base number
-    y -- the exponent (default 2)
-    z -- the multiplier (default 4)
-    """
-    return x**y
-```
 
 ## Modules
 
@@ -572,7 +603,7 @@ If we want to allow for an indefinite number of arguments to be passed at functi
 
 To use positional argument unpacking, we use a parameter, typically `args` (by standard practice), suffixed by `*` in our function signature. Passed positional arguments will be packed into a tuple and stored in this parameter, which we can then interact with in the function definition. In this case, we call `*args` an *unpacked positional parameter*.
 
-The following example prints each word in upper case:
+The following example prints each word in uppercase:
 
 ```Python
 def exclamation(*args):
@@ -647,7 +678,7 @@ Recall that Python has different data types such as `float`,` int`, `list` and `
 
 A *class* is a template for a data type, i.e. creating a class allows you to create your own data type, including the kind of information that it can hold and the possible interactions.
 
-To define a class, use the `class` keyword. The class name should be written in PascalCase (following the PEP 8 style guide [here](https://www.python.org/dev/peps/pep-0008/#class-names)).
+To define a class, use the `class` keyword.
 
 ```Python
 class RandomClass:
