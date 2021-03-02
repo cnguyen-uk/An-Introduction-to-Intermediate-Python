@@ -181,7 +181,7 @@ This section contains some quick useful pieces of Python which may not have been
 
 ### Handling Exceptions
 
-It is generally better to handle exceptions by not letting them occur in the first place. However, this isn't always possible. As part of the debugging process, instead of letting the program crash, we can catch errors using a `try` and `except` block. Additionally, errors can be specified for the `except` block. We can also use a `finally` block to execute code regardless of whether the `try` block raises an error.
+It is generally better to handle exceptions by not letting them occur in the first place. However, this isn't always possible. As part of the debugging process, instead of letting the program crash, we can catch errors using a `try` and `except` block. Additionally, errors can be specified for the `except` block. Optionally, we can use an `else` block which executes if no errors were caught, and we can also use a `finally` block which executes regardless of whether any of the previous blocks were executed.
 
 ```Python
 def division(x, y):
@@ -193,8 +193,10 @@ except ZeroDivisionError:
     print("You cannot divide by zero")
 except:
     print("Something else went wrong")
+else:
+    print("Nothing went wrong")
 finally:
-    print("The try/except block has finished")
+    print("The try/except/else blocks have finished")
 ```
 
 ### Aggregating Iterables
