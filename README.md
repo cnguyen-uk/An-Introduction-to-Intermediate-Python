@@ -24,6 +24,7 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Aggregating Iterables](#aggregating-iterables)
   * [Using `in` With `print()`](#using-in-with-print)
   * [List Comprehension](#list-comprehension)
+  * [Namespace Checking](#namespace-checking)
 - [Modules](#modules)
   * [Importing Particular Objects from a Module](#importing-particular-objects-from-a-module)
   * [Importing All Objects from a Module](#importing-all-objects-from-a-module)
@@ -231,6 +232,25 @@ List comprehension allows for the creation of lists in a concise way. The basic 
 Expressions can be anything, and we can have as many `for` or `if` statements as we like, including zero.
 
 Set and dictionary comprehension works in the same way.
+
+### Namespace Checking
+
+The `locals()` and `globals()` native methods can be used to view all of the variables in the local namespace and global namespace, respectively, stored as a dictionary.
+
+```Python
+example_word = "Hello, World!"
+
+def foo():
+    bar = 4
+    return locals()
+
+print(foo())  # Print: {'bar': 4}
+
+# The output of the below can differ across Python versions and setups,
+# but in this example the printed dictionary will always contain:
+# example_word: "Hello, World!"
+print(globals())
+```
 
 ## Modules
 
