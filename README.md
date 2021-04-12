@@ -78,9 +78,9 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Decorating a Function](#decorating-a-function)
   * [Using Decorators](#using-decorators)
   * [Decorators with Parameters](#decorators-with-parameters)
-- [The `__name__` Variable](#the-name-variable)
-  * [Setting the `__name__` Variable](#setting-the----name----variable)
-  * [The `__name__ == "__main__"` Guard](#the----name---------main-----guard)
+- [The `__name__` Variable](#the-__name__-variable)
+  * [Setting the `__name__` Variable](#setting-the-__name__-variable)
+  * [The `__name__ == "__main__"` Guard](#the-__name__--__main__-guard)
   * [Use Cases](#use-cases)
 
 ## Code Standards
