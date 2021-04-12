@@ -78,6 +78,10 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Decorating a Function](#decorating-a-function)
   * [Using Decorators](#using-decorators)
   * [Decorators with Parameters](#decorators-with-parameters)
+- [The `__name__` Variable](#the-name-variable)
+  * [Setting the `__name__` Variable](#setting-the----name----variable)
+  * [The `__name__ == "__main__"` Guard](#the----name---------main-----guard)
+  * [Use Cases](#use-cases)
 
 ## Code Standards
 
@@ -1265,3 +1269,75 @@ print_item("table")
 # Print: A nice, clean and sparkly:
 #        table
 ```
+
+## The `__name__` Variable
+
+Whenever a Python file is run, before executing all of the code found in the file, the Python interpreter will first set some special variables, such as `__doc__`, `__package__`, and `__file__`. One of these is the `__name__` variable.
+
+### Setting the `__name__` Variable
+
+If we have a Python source file named `example_module.py`, then there are two ways to interact with it.
+
+The first way is to run `example_module.py` as the main program. In this case, the Python interpreter will automatically hardcode the string `"__main__"` to the special variable `__name__`, i.e. as if the following code is inserted at the very top of our module:
+
+```Python
+__name__ = "__main__"
+```
+
+The second way is to import `example_module.py` as a module in another program. In this case, the Python interpreter will automatically hardcode the string `"example_module"` to the special variable `__name__`, i.e. as if the following code is inserted at the very top of our module:
+
+```Python
+__name__ = "example_module"
+```
+
+Of course, nothing stops us from manually overwriting the special variable `__name__` if we wanted to.
+
+### The `__name__ == "__main__"` Guard
+
+When a module is executed or imported, any loose code within that module will also be executed at import time. By using the `__name__` special variable to form guard code, we can prevent loose code from being unintentionally executed.
+
+Suppose the following code sample is `a_module.py`:
+
+```Python
+# This is a_module.py.
+def function_one():
+    print("This is Function One")
+
+def function_two():
+    print("This is Function Two")
+
+print("Before __name__ guard code")
+function_one()
+if __name__ == "__main__":
+    print("This is inside the __name__ guard code")
+    function_two()
+print("After __name__ guard code")
+```
+
+If `a_module.py` is executed as the main program, then since the string `"__main__"` is hardcoded to the special variable `__name__`, the guard code is satisfied and we get the following output:
+
+```
+Before __name__ guard code
+This is Function One
+This is inside the __name__ guard code
+This is Function Two
+After __name__ guard code
+```
+
+If we instead import `a_module.py` in a different module, then since the string `"a_module"` is hardcoded to the special variable `__name__`, the guard code is not satisfied and we instead get the following output:
+
+```
+Before __name__ guard code
+This is Function One
+After __name__ guard code
+```
+
+### Use Cases
+
+In general, such guard code is useful when we want the module to be executed as the main program itself, but also be imported by other modules without accidentally invoking code at import time. Examples include:
+
+- A module that is to be imported as a library, but can also be executed as the main program to run some unit tests or a demo.
+- A module that is intended to be run as the main program, but can optionally be imported as a programmer-friendly API.
+- A module that is only ever run as the main program, but unit testing on it is done by importing the module somewhere else, and running some specific test functions - it would clearly be a mistake to run the module's script too.
+
+In particular, note that "running a script" in Python is a side effect of setting up some special variables, and then importing the module containing the script.
