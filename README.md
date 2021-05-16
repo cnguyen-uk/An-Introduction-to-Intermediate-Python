@@ -698,7 +698,7 @@ We will now introduce several definitions and concepts which are core to OOP.
 
 #### Types
 
-Recall that Python has different data types such as `float`,` int`, `list` and `dict`, and that these are often stored in variables. The type of a Python variable can be checked using the `type()` function. A variable's type determines what we can do with it, and interactions with variables are defined at the type level. For example, we can't use the `.get()` method on an `int`, nor can we use `+` on two variables with the `dict` data type.
+Recall that Python has different data types such as `float`, `int`, `list` and `dict`, and that these are often stored in variables. The type of a Python variable can be checked using the `type()` function. A variable's type determines what we can do with it, and interactions with variables are defined at the type level. For example, we can't use the `.get()` method on an `int`, nor can we use `+` on two variables with the `dict` data type.
 
 #### Classes
 
