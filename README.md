@@ -59,7 +59,7 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
     + [Class Variables](#class-variables)
     + [Instance Variables](#instance-variables)
     + [Attributes](#attributes)
-    + [Methods](#methods)
+    + [Methods](#methods-1)
     + [Dunder Methods](#dunder-methods)
       - [Constructors](#constructors)
       - [String Representation](#string-representation)
