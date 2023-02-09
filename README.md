@@ -20,7 +20,6 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Quotes](#quotes)
   * [Names](#names)
 - [Quick Useful Python](#quick-useful-python)
-  * [Handling Exceptions](#handling-exceptions)
   * [Aggregating Iterables](#aggregating-iterables)
   * [Using `in` With `print()`](#using-in-with-print)
   * [List Comprehension](#list-comprehension)
@@ -70,9 +69,13 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
     + [Inheritance](#inheritance)
     + [Overriding](#overriding)
     + [The `super()` Function](#the-super-function)
-    + [The `Exception` Class](#the-exception-class)
     + [Interfaces](#interfaces)
     + [Polymorphism](#polymorphism)
+- [Exceptions](#exceptions)
+  * [The `Exception` Class](#the-exception-class)
+  * [Raising Exceptions](#raising-exceptions)
+  * [Handling Exceptions](#handling-exceptions)
+  * [User-Defined Exceptions](#user-defined-exceptions)
 - [Decorators](#decorators)
   * [Functions Within Functions](#functions-within-functions)
   * [Decorating a Function](#decorating-a-function)
@@ -183,26 +186,6 @@ Unfortunately there is no convention for general names. However, in this section
 ## Quick Useful Python
 
 This section contains some quick useful pieces of Python which may not have been covered in a basic Python course.
-
-### Handling Exceptions
-
-It is generally better to handle exceptions by not letting them occur in the first place. However, this isn't always possible. As part of the debugging process, instead of letting the program crash, we can catch errors using a `try` and `except` block. Additionally, errors can be specified for the `except` block. Optionally, we can use an `else` block which executes if no errors were caught, and we can also use a `finally` block which executes regardless of whether any of the previous blocks were executed.
-
-```Python
-def division(x, y):
-    return x/y
-
-try:
-    division(3, 0)
-except ZeroDivisionError:
-    print("You cannot divide by zero")
-except:
-    print("Something else went wrong")
-else:
-    print("Nothing went wrong")
-finally:
-    print("The try/except/else blocks have finished")
-```
 
 ### Aggregating Iterables
 
@@ -1016,30 +999,6 @@ class SuperCar(Car):
        self.turbo_boost = turbo_boost
 ```
 
-#### The `Exception` Class
-
-Python has a built-in class called [`Exception`](https://docs.python.org/3/library/exceptions.html#Exception). All user-defined exceptions should inherit from this class. All built-in, non-system-exiting exceptions also inherit from this class. (There is also another class called [`BaseException`](https://docs.python.org/3/library/exceptions.html#BaseException) which is the base class for all built-in exceptions, but user-defined classes should not inherit from this.)
-
-The main benefit of allowing exceptions to inherit from one another is that we can choose to catch them at any level in our defined exception hierarchy. In the following example we create exceptions for starting a car:
-
-```Python
-class CarException(Exception):
-    pass
-
-class IgnitionException(CarException):
-    pass
-
-class SteeringException(CarException):
-    pass
-
-class GearboxException(CarException):
-    pass
-```
-
-In the above example, if we wanted to catch an exception with a `try` and `except` block, instead of having to catch `CarException`, `IgnitionException` and `GearboxException`, we could just catch `CarException` instead depending on how granular we wish to be.
-
-Using an exception hierarchy allows for greater control over the level of preciseness we wish to have. For the built-in exceptions, the hierarchy can be seen in the documentation [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
-
 #### Interfaces
 
 Sometimes it can be useful to have different classes with differently implemented methods to use the same method name. This is especially useful when we want an object, regardless of which class it is an instance of, to perform the same type of task.
@@ -1166,6 +1125,98 @@ print(cyan)  # Print: RGB = (0, 255, 255)
 print(yellow)  # Print: RGB = (255, 0, 255)
 print(white)  # Print: RGB = (255, 255, 255)
 ```
+
+## Exceptions
+
+There are two core types of errors:
+- Syntax Errors: Mistakes in the structure of the code. These are caught at compile-time, and hence stop the entire program from running.
+- Exceptions: Syntactically correct code, and only caught when the offending line of code is reached. These are caught at run-time, so may not be encountered if certain code paths are not executed.
+
+### The `Exception` Class
+
+Exceptions in Python are objects, and all of the built-in, non-system-exiting exceptions inherit directly from the [`Exception`](https://docs.python.org/3/library/exceptions.html#Exception) class. All [user-defined exceptions](#user-defined-exceptions) should also inherit from this class. The base class for all-built-in exceptions is [`BaseException`](https://docs.python.org/3/library/exceptions.html#BaseException), which user-defined exceptions typically should not inherit from. The built-in exceptions are listed [here](https://docs.python.org/3/library/exceptions.html#built-in-exceptions), and the exception hierarchy [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
+
+### Raising Exceptions
+
+Exceptions can be thrown at any time, even if Python would not normally throw one, using the `raise` keyword. This is often done when we think that a mistake has occurred in the program, or when we're in a situation where we can't produce a normal or valid response.
+
+Where possible, `raise` should be paired with a specific exception class name, but we can also raise a generic exception:
+```py
+raise  # Raise the last exception that was raised and handled
+
+raise NameError  # Raise a NameError
+
+raise NameError("Foo")  # Raise a NameError with custom message "Foo"
+
+raise Exception("Bar")  # Raise a generic exception with custom message "Bar"
+```
+
+### Handling Exceptions
+
+Exceptions can be caught using the `except` keyword. It is generally better to handle exceptions by not letting them occur in the first place, but this isn't always possible. As part of the debugging process, instead of letting the program crash, we can catch errors using a `try` and `except` block. Optionally, we can use an `else` block which executes if no exceptions were caught, and we can also use a `finally` block which executes regardless of whether any of the previous blocks were executed.
+
+```Python
+def division(x, y):
+    return x/y
+
+try:
+    division(3, 0)
+except ZeroDivisionError:  # Catch a ZeroDivisionError exception
+    print("You cannot divide by zero")
+except:  # Catch a generic exception, i.e. all of them
+    print("Something else went wrong")
+else:
+    print("Nothing went wrong")
+finally:
+    print("The try/except/else blocks have finished")
+```
+
+It can be useful to access the attributes of the exception object explicitly:
+```Python
+try:
+    division(3, 0)
+except ZeroDivisionError as e:  # Catch a ZeroDivisionError exception
+    print("Encountered ZeroDivisionError:", e)
+except (OverflowError, BufferError) as e:  # Catch multiple exceptions
+    print("Encountered an exception:", e.args)
+```
+
+**Note:** The `try` block will execute until an exception occurs - including multiple lines within this can confuse debugging.
+
+### User-Defined Exceptions
+
+It can be useful to create a custom exception class with a custom error message for more detailed error logging. This usually inherits from `Exception` (or `BaseException`, though this is atypical):
+```Python
+class CustomError(Exception):
+    def __init__(self, foo):
+	    self.foo = foo
+
+    def __str__(self):  # Override __str__ rather than __repr__, since we can't assume __str__ == __repr__
+	    return bar + str(self.foo) + baz
+
+# Print the following, if thrown:
+# Traceback (most recent call last):
+# ...
+#     raise CustomError(foo)
+#   __main__.CustomError: bar + foo + baz
+```
+
+Custom exceptions can also subclass from any exception class, which will allow us to choose to catch them at any level in our defined exception hierarchy. In the following example we create exceptions for starting a car:
+```Python
+class CarException(Exception):
+    ...
+
+class IgnitionException(CarException):
+    ...
+
+class SteeringException(CarException):
+    ...
+
+class GearboxException(CarException):
+    ...
+```
+
+In the above example, if we wanted to catch an exception with a `try` and `except` block, instead of having to catch `IgnitionException`, `SteeringException`, and `GearboxException`, we could just catch `CarException` instead, depending on how granular we wish to be. Using an exception hierarchy allows for greater control over the level of preciseness we wish to have.
 
 ## Decorators
 
