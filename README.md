@@ -137,7 +137,7 @@ Docstrings should be wrapped with triple double quotes `""" """` and there shoul
 One-line docstrings are for obvious cases. There should not be a blank line before or after the docstring, and it should be a phrase ending in a period which prescribes the function or method's effect as a command, not as a description. For example, the following is preferred:
 
 ```Python
-def triple(x)
+def triple(x):
     """Return the triple of a number."""
     return 3*x
 ```
@@ -145,7 +145,7 @@ def triple(x)
 As a comparison, the following should be avoided:
 
 ```Python
-def triple(x)
+def triple(x):
     """Returns the triple of a number."""
     return 3*x
 ```
@@ -155,7 +155,7 @@ def triple(x)
 Multi-line docstrings begin with a summary line, on the same line as the starting triple quotes, followed by a space, a more elaborate description, and then the ending triple quotes on a line by themselves. For example:
 
 ```Python
-def power(x, y=2, z=4)
+def power(x, y=2, z=4):
     """Raise x to the power of y, then multiply by 4.
 
     Arguments:
@@ -222,7 +222,7 @@ Set and dictionary comprehension works in the same way.
 
 ### Namespace Checking
 
-The `locals()` and `globals()` native methods can be used to view all of the variables in the local namespace and global namespace, respectively, stored as a dictionary.
+The `locals()` and `globals()` native methods can be used to view all the variables in the local namespace and global namespace, respectively, stored as a dictionary.
 
 ```Python
 example_word = "Hello, World!"
@@ -241,7 +241,7 @@ print(globals())
 
 ## Modules
 
-Modules allow for the usage of objects from outside of what's usually available. In fact, files are actually modules, so we can use the `import` keyword to access another file's contents within the same directory. Below we'll see various ways of using the `import` keyword.
+Modules allow for the usage of objects from outside what's usually available. In fact, files are actually modules, so we can use the `import` keyword to access another file's contents within the same directory. Below we'll see various ways of using the `import` keyword.
 
 ### Importing Particular Objects from a Module
 
@@ -270,7 +270,7 @@ alias_name()
 
 ### Importing All Objects from a Module
 
-Instead of importing objects one at a time from a module, we may also import them all at once. As we will see, this way of importing requires specifying the module (or its alias) every time we call any objects from it. This is useful if we want to call several different objects from the module and want clarity in the code on where these objects have originated from.
+Instead of importing objects one at a time from a module, we may also import them all at once. As we will see, this way of importing requires specifying the module (or its alias) every time we call any objects from it. This is useful if we want to call several objects from the module and want clarity in the code on where these objects have originated from.
 
 To import a module and call a particular object from that module, then we can use the following syntax:
 
@@ -280,7 +280,7 @@ import module_name
 module_name.object_name()
 ```
 
-Similar to the previous section, we can also use the `as` keyword to give the imported module an alias. We can then call a particular object from the module using the alias. Also similar to the previous section, using aliases can be useful when module names being imported conflict within our local namespace.
+Similar to the previous section, we can also use the `as` keyword to give the imported module an alias. We can then call a particular object from the module using the alias. Also, similar to the previous section, using aliases can be useful when module names being imported conflict within our local namespace.
 
 ```Python
 import module_name as alias_name
@@ -489,7 +489,7 @@ The `load()` method from the `json` module can be used to convert the JSON file 
 ```Python
 import json
 
-with open('purchase_14781239.json') as purchase_json
+with open('purchase_14781239.json') as purchase_json:
     purchase_data = json.load(purchase_json)
 ```
 
@@ -514,7 +514,7 @@ with open('output.json', 'w') as json_file:
 
 ## Advanced Function Arguments
 
-It's impossible to use Python without arguments so it's safe to say that every Python user knows how to use them. However, it is possible to use Python without knowing about some of the finer details which are offered by Python's expressive function syntax. In fact, earlier in this guide there was some use of default arguments [here](#multi-line-docstrings) and keyword arguments [here](#csv-files).
+It's impossible to use Python without arguments, so it's safe to say that every Python user knows how to use them. However, it is possible to use Python without knowing about some finer details which are offered by Python's expressive function syntax. In fact, earlier in this guide there was some use of default arguments [here](#multi-line-docstrings) and keyword arguments [here](#csv-files).
 
 ### Definitions
 
@@ -570,7 +570,7 @@ def list_add(num, lst = None):
 
 ### Positional and Keyword Arguments
 
-Typically when a function is called, we must pass arguments in the order in which the parameters are listed in the function signature. These passed arguments are called *positional arguments*.
+Typically, when a function is called, we must pass arguments in the order in which the parameters are listed in the function signature. These passed arguments are called *positional arguments*.
 
 If we want to pass arguments in any order, then we need to explicitly pass the name of parameters as arguments (along with their values). These explicitly named arguments are called *keyword arguments*.
 
@@ -635,7 +635,7 @@ bills(name = "Alice", city = "London", owed = 900)  # Print: 900
 
 ### Parameter and Argument Order
 
-We can use a mix of all of the previously mentioned types of parameters, but this must be done in a particular order in the function signature:
+We can use a mix of all the previously mentioned types of parameters, but this must be done in a particular order in the function signature:
 - All non-unpacked positional parameters.
 - An unpacked positional parameter.
 - All non-unpacked keyword parameters.
@@ -681,7 +681,7 @@ We will now introduce several definitions and concepts which are core to OOP.
 
 #### Types
 
-Recall that Python has different data types such as `float`, `int`, `list` and `dict`, and that these are often stored in variables. The type of a Python variable can be checked using the `type()` function. A variable's type determines what we can do with it, and interactions with variables are defined at the type level. For example, we can't use the `.get()` method on an `int`, nor can we use `+` on two variables with the `dict` data type.
+Recall that Python has different data types such as `float`, `int`, `list` and `dict`, and that these are often stored in variables. The type of Python variable can be checked using the `type()` function. A variable's type determines what we can do with it, and interactions with variables are defined at the type level. For example, we can't use the `.get()` method on an `int`, nor can we use `+` on two variables with the `dict` data type.
 
 #### Classes
 
@@ -870,7 +870,7 @@ Our above usage of `self` within the `__init__` dunder method will be discussed 
 
 #### Using `self`
 
-We have already seen that we can create instance variables outside of the indented block of class code. It can sometimes be useful to create instance variables upon class instantiation by using the constructor. For example, if we can guarantee rigidity to the data that an object holds, such as a name or URL, then this may be desirable for convenience and code readability.
+We have already seen that we can create instance variables outside the indented block of class code. It can sometimes be useful to create instance variables upon class instantiation by using the constructor. For example, if we can guarantee rigidity to the data that an object holds, such as a name or URL, then this may be desirable for convenience and code readability.
 
 We have already seen an example of this in the previous section. Here we also present another example for the scenario where we create instance variables of some properties of some squares.
 
@@ -901,7 +901,7 @@ So far we have seen the following definition:
 An <i>object</i> is a collection of variables, and methods that can act on those variables.
 </p>
 
-In fact, a more general statement is true - objects are Python's [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)#Abstraction_in_object_oriented_programming) for data, and all data in a Python program are represented either by objects or by relations between objects (see the [documentation](https://docs.python.org/3/reference/datamodel.html)). In other words, objects allow users to interact with data and use it without needing to actually know about the the underlying mechanics of the data itself.
+In fact, a more general statement is true - objects are Python's [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)#Abstraction_in_object_oriented_programming) for data, and all data in a Python program are represented either by objects or by relations between objects (see the [documentation](https://docs.python.org/3/reference/datamodel.html)). In other words, objects allow users to interact with data and use it without needing to actually know about the underlying mechanics of the data itself.
 
 Furthermore, functions and methods are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen). In particular, methods are [function objects](https://docs.python.org/3/c-api/method.html#method-objects) (also called [*functors*](https://en.wikipedia.org/wiki/Function_object)).
 
@@ -1134,7 +1134,7 @@ There are two core types of errors:
 
 ### The `Exception` Class
 
-Exceptions in Python are objects, and all of the built-in, non-system-exiting exceptions inherit directly from the [`Exception`](https://docs.python.org/3/library/exceptions.html#Exception) class. All [user-defined exceptions](#user-defined-exceptions) should also inherit from this class. The base class for all-built-in exceptions is [`BaseException`](https://docs.python.org/3/library/exceptions.html#BaseException), which user-defined exceptions typically should not inherit from. The built-in exceptions are listed [here](https://docs.python.org/3/library/exceptions.html#built-in-exceptions), and the exception hierarchy [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
+Exceptions in Python are objects, and all the built-in, non-system-exiting exceptions inherit directly from the [`Exception`](https://docs.python.org/3/library/exceptions.html#Exception) class. All [user-defined exceptions](#user-defined-exceptions) should also inherit from this class. The base class for all-built-in exceptions is [`BaseException`](https://docs.python.org/3/library/exceptions.html#BaseException), which user-defined exceptions typically should not inherit from. The built-in exceptions are listed [here](https://docs.python.org/3/library/exceptions.html#built-in-exceptions), and the exception hierarchy [here](https://docs.python.org/3/library/exceptions.html#exception-hierarchy).
 
 ### Raising Exceptions
 
@@ -1323,7 +1323,7 @@ print_item("table")
 
 ## The `__name__` Variable
 
-Whenever a Python file is run, before executing all of the code found in the file, the Python interpreter will first set some special variables, such as `__doc__`, `__package__`, and `__file__`. One of these is the `__name__` variable.
+Whenever a Python file is run, before executing all the code found in the file, the Python interpreter will first set some special variables, such as `__doc__`, `__package__`, and `__file__`. One of these is the `__name__` variable.
 
 ### Setting the `__name__` Variable
 
@@ -1365,7 +1365,7 @@ if __name__ == "__main__":
 print("After __name__ guard code")
 ```
 
-If `a_module.py` is executed as the main program, then since the string `"__main__"` is hardcoded to the special variable `__name__`, the guard code is satisfied and we get the following output:
+If `a_module.py` is executed as the main program, then since the string `"__main__"` is hardcoded to the special variable `__name__`, the guard code is satisfied, and we get the following output:
 
 ```
 Before __name__ guard code
@@ -1375,7 +1375,7 @@ This is Function Two
 After __name__ guard code
 ```
 
-If we instead import `a_module.py` in a different module, then since the string `"a_module"` is hardcoded to the special variable `__name__`, the guard code is not satisfied and we instead get the following output:
+If we instead import `a_module.py` in a different module, then since the string `"a_module"` is hardcoded to the special variable `__name__`, the guard code is not satisfied, and we instead get the following output:
 
 ```
 Before __name__ guard code
