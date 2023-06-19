@@ -1189,10 +1189,10 @@ It can be useful to create a custom exception class with a custom error message 
 ```Python
 class CustomError(Exception):
     def __init__(self, foo):
-	    self.foo = foo
+        self.foo = foo
 
     def __str__(self):  # Override __str__ rather than __repr__, since we can't assume __str__ == __repr__
-	    return bar + str(self.foo) + baz
+        return bar + str(self.foo) + baz
 
 # Print the following, if thrown:
 # Traceback (most recent call last):
