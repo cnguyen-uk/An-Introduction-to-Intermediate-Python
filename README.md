@@ -1423,10 +1423,10 @@ There are multiple built-in frameworks used for unit testing in Python, includin
 #### The unittest Framework
 
 In this framework, which uses the `unittest` module:
-- Unit tests for a single unit being tested are grouped as methods in a class which inherits from `unittest.TestCase`
-- Unit tests begin with the word "test"
-- Instead of using the `assert` statement, unit tests use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions))
-- Tests are run by calling `unittest.main()`
+- Unit tests for a single unit being tested are grouped as test methods in a test class which inherits from `unittest.TestCase`
+- Test methods begin with the word "test"
+- Instead of using the `assert` statement, test methods use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions))
+- Test methods are run by calling `unittest.main()`
 
 For example:
 
@@ -1446,7 +1446,9 @@ class AddOneTests(unittest.TestCase):
 unittest.main()
 ```
 
-Unit tests may be parameterised using the `subTest` context manager, to allow larger coverage of different inputs.
+##### Parameterising Tests
+
+Test methods may be parameterised using the `subTest` context manager - this allows for larger coverage of different inputs without needing to create a new test method for each one.
 
 ```Python
 import unittest
@@ -1457,6 +1459,74 @@ def add_one(number):
 class AddOneTests(unittest.TestCase):
     def test_add_one(self):
         for num in [0, -1]:
-            with self.subTest(num):  # Add optional message to identify which test case failed
+            with self.subTest(num):  # Add optional message to distinguish test iterations, in case of test failures
                 self.assertEqual(add_one(num), num + 1, f"Expected {num + 1}, instead got {add_one(num)}")
 ```
+
+##### Test Fixtures
+
+Test fixtures may be created at a method or class level to ensure tests run in a known state:
+- At a method level, the `setUp()` method is called immediately before calling the test method, to prepare the test fixture; and the `tearDown()` method is called immedately after calling the test method
+- Similarly, at a class level, the `setUpClass()` and `tearDownClass()` class methods are used, which are immediately called before and after calling the first and last test method of a test class, respectively
+
+For example, if the following tests were run:
+```Python
+import unittest
+
+def quick_system_refresh():
+    print("Quickly refreshing some system state...")
+
+def full_system_refresh():
+    print("Fully refreshing some system state, this may take some time...")
+
+class FeatureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        full_system_refresh()
+
+    def setUp(self):
+        quick_system_refresh()
+
+    def test_feature_a(self):
+        print("Testing Feature A")
+    
+    def test_feature_b(self):
+        print("Testing Feature B")
+
+    def test_feature_c(self):
+        print("Testing Feature C")
+
+    def tearDown(self):
+        quick_system_refresh()
+
+    @classmethod
+    def tearDownClass(cls):
+        full_system_refresh()
+```
+
+... then the output would be:
+```
+Fully refreshing some system state, this may take some time...
+Quickly refreshing some system state...
+Testing Feature A
+Quickly refreshing some system state...
+Quickly refreshing some system state...
+Testing Feature B
+Quickly refreshing some system state...
+Quickly refreshing some system state...
+Testing Feature C
+Quickly refreshing some system state...
+Fully refreshing some system state, this may take some time...
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+```
+
+##### Skipping Tests
+
+Tests may be skipped by either:
+- Using a `skip()` decorator, or one of its conditional variants `skipIf()`, `skipUnless()`
+- Calling the `skipTest()` method of `unittest.TestCase` within a `setUp()` or test method
+
