@@ -85,6 +85,7 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Setting the `__name__` Variable](#setting-the-__name__-variable)
   * [The `__name__ == "__main__"` Guard](#the-__name__--__main__-guard)
   * [Use Cases](#use-cases)
+- [Testing](#testing)
 
 ## Code Standards
 
@@ -1392,3 +1393,70 @@ In general, such guard code is useful when we want the module to be executed as 
 - A module that is only ever run as the main program, but unit testing on it is done by importing the module somewhere else, and running some specific test functions - it would clearly be a mistake to run the module's script too.
 
 In particular, note that "running a script" in Python is a side effect of setting up some special variables, and then importing the module containing the script.
+
+## Testing
+
+Testing can generally be divided into two categories:
+- Manual Testing: Performed by a human user interacting with the software by running it and observing the results.
+- Automated Testing: Performed by code.
+
+Most code is complex enough that manual testing is error-prone, tedious, and time-consuming.
+
+The `assert` statement can be used to automatically test that a condition is met, rather than manually observing and verifying the output of a `print()`. If the condition evaluates to `False`, then an `AssertionError` is raised - an optional error message may be specified.
+
+```Python
+def always_true():
+    return True
+
+def test_always_true():
+    assert always_true() == True, f"Expected always_true() to return True, instead got {always_true()}"
+
+test_always_true()
+```
+
+### Unit Testing
+
+A common way to begin setting up automated tests is to do so with the smallest unit of a program, such as a single function, loop, or variable. These tests are called *unit tests*, and should validate a single behaviour of a single unit. Testing more behaviours will improve test coverage, and can be done by creating more test cases for other inputs, including reasonable ones and specific edge cases.
+
+There are multiple built-in frameworks used for unit testing in Python, including unittest (also called PyUnit), Pytest, and Doctest, which often aim to provide a test runner, and other tools such as test grouping, setup, teardown, and skipping. Without a framework, tests will stop running after a single `AssertionError`. 
+
+#### The unittest Framework
+
+In this framework, which uses the `unittest` module:
+- Unit tests for a single unit being tested are grouped as methods in a class which inherits from `unittest.TestCase`
+- Unit tests begin with the word "test"
+- Instead of using the `assert` statement, unit tests use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions))
+- Tests are run by calling `unittest.main()`
+
+For example:
+
+```Python
+import unittest
+
+def add_one(number):
+    return number + 1
+
+class AddOneTests(unittest.TestCase):
+    def test_add_one_to_zero(self):
+      self.assertEqual(add_one(0), 1, f"Expected 1, instead got {add_one(0)}")
+
+    def test_add_one_to_minus_one(self):
+      self.assertEqual(add_one(-1), 0, f"Expected 0, instead got {add_one(-1)}")
+
+unittest.main()
+```
+
+Unit tests may be parameterised using the `subTest` context manager, to allow larger coverage of different inputs.
+
+```Python
+import unittest
+
+def add_one(number):
+    return number + 1
+
+class AddOneTests(unittest.TestCase):
+    def test_add_one(self):
+        for num in [0, -1]:
+            with self.subTest(num):  # Add optional message to identify which test case failed
+                self.assertEqual(add_one(num), num + 1, f"Expected {num + 1}, instead got {add_one(num)}")
+```
