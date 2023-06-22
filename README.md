@@ -1418,9 +1418,9 @@ test_always_true()
 
 A common way to begin setting up automated tests is to do so with the smallest unit of a program, such as a single function, loop, or variable. These tests are called *unit tests*, and should validate a single behaviour of a single unit. Testing more behaviours will improve test coverage, and can be done by creating more test cases for other inputs, including reasonable ones and specific edge cases.
 
-There are multiple built-in frameworks used for unit testing in Python, including unittest (also called PyUnit), Pytest, and Doctest, which often aim to provide a test runner, and other tools such as test grouping, setup, teardown, and skipping. Without a framework, tests will stop running after a single `AssertionError`. 
+There are multiple built-in frameworks used for unit testing in Python, including `unittest` (also called PyUnit), Pytest, and Doctest, which often aim to provide a test runner, and other tools such as test grouping, setup, teardown, and skipping. Without a framework, tests will stop running after a single `AssertionError`. 
 
-#### The unittest Framework
+#### The `unittest` Framework
 
 In this framework, which uses the `unittest` module:
 - Unit tests for a single unit being tested are grouped as test methods in a test class which inherits from `unittest.TestCase`
@@ -1548,3 +1548,6 @@ class FeatureTests(unittest.TestCase):
     def test_bad_feature(self):
         raise Exception("This test will fail")
 ```
+
+#### The PyTest Framework
+
