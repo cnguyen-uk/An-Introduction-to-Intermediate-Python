@@ -1524,9 +1524,27 @@ Ran 3 tests in 0.000s
 OK
 ```
 
-##### Skipping Tests
+##### Skipping Tests and Expected Failures
 
 Tests may be skipped by either:
 - Using a `skip()` decorator, or one of its conditional variants `skipIf()`, `skipUnless()`
 - Calling the `skipTest()` method of `unittest.TestCase` within a `setUp()` or test method
 
+If a test should be expected to fail, then instead of skipping it, we can be mark it with an `expectedFailure` decorator.
+
+```Python
+import unittest
+
+class FeatureTests(unittest.TestCase):
+    @unittest.skip("This test is skipped")
+    def test_feature_a(self):
+        print("Testing Feature A")
+
+    def test_feature_b(self):
+        self.skipTest("This test is also skipped")
+        print("Testing Feature B")
+
+    @unittest.expectedFailure
+    def test_bad_feature(self):
+        raise Exception("This test will fail")
+```
