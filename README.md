@@ -1424,8 +1424,8 @@ There are multiple built-in frameworks used for unit testing in Python, includin
 
 In this framework, which uses the `unittest` module:
 - Unit tests for a single unit being tested are grouped as test methods in a test class which inherits from `unittest.TestCase`
-- Test methods begin with the word "test"
-- Instead of using the `assert` statement, test methods use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions))
+- Test methods must begin with `test_`
+- Instead of using the `assert` statement, test methods use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions)). This is so that the test runner can accumulate all test results, and produce a report
 - Test methods are run by calling `unittest.main()`
 
 For example:
@@ -1438,10 +1438,10 @@ def add_one(number):
 
 class AddOneTests(unittest.TestCase):
     def test_add_one_to_zero(self):
-      self.assertEqual(add_one(0), 1, f"Expected 1, instead got {add_one(0)}")
+        self.assertEqual(add_one(0), 1, f"Expected 1, instead got {add_one(0)}")
 
     def test_add_one_to_minus_one(self):
-      self.assertEqual(add_one(-1), 0, f"Expected 0, instead got {add_one(-1)}")
+        self.assertEqual(add_one(-1), 0, f"Expected 0, instead got {add_one(-1)}")
 
 unittest.main()
 ```
@@ -1489,12 +1489,15 @@ class FeatureTests(unittest.TestCase):
 
     def test_feature_a(self):
         print("Testing Feature A")
+        ...
     
     def test_feature_b(self):
         print("Testing Feature B")
+        ...
 
     def test_feature_c(self):
         print("Testing Feature C")
+        ...
 
     def tearDown(self):
         quick_system_refresh()
@@ -1539,15 +1542,27 @@ class FeatureTests(unittest.TestCase):
     @unittest.skip("This test is skipped")
     def test_feature_a(self):
         print("Testing Feature A")
+        ...
 
     def test_feature_b(self):
         self.skipTest("This test is also skipped")
         print("Testing Feature B")
+        ...
 
     @unittest.expectedFailure
     def test_bad_feature(self):
         raise Exception("This test will fail")
 ```
 
-#### The PyTest Framework
+#### The Pytest Framework
 
+In this framework, which uses the `pytest` module:
+- Test methods must begin with `test_`
+
+Additionally, [almost all](https://docs.pytest.org/en/7.1.x/how-to/unittest.html) tests written using the `unittest` framework are supported, and can automatically be collected into test files by running `pytest tests`
+
+This framework is a popular testing framework which aims to address some of the `unittest` shortcomings. In particular:
+- There's less boilerplate code
+- There's no need to use the specific built-in assert methods of `unittest.TestCase`
+- Test reports have more information whilst being more readable
+- 
