@@ -86,6 +86,16 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [The `__name__ == "__main__"` Guard](#the-__name__--__main__-guard)
   * [Use Cases](#use-cases)
 - [Testing](#testing)
+  * [Unit Testing](#unit-testing)
+    + [The `unittest` Framework](#the--unittest--framework)
+      - [Parametrising Tests](#parametrising-tests)
+      - [Test Fixtures](#test-fixtures)
+      - [Skipping Tests and Expected Failures](#skipping-tests-and-expected-failures)
+    + [The Pytest Framework](#the-pytest-framework)
+      - [Test Fixtures](#test-fixtures-1)
+    + [Marks](#marks)
+      - [Parametrising Tests](#parametrising-tests-1)
+      - [Slow Tests](#slow-tests)
 
 ## Code Standards
 
