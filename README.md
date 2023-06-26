@@ -93,7 +93,7 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
       - [Skipping Tests and Expected Failures](#skipping-tests-and-expected-failures)
     + [The Pytest Framework](#the-pytest-framework)
       - [Test Fixtures](#test-fixtures-1)
-    + [Marks](#marks)
+      - [Marks](#marks)
       - [Parametrising Tests](#parametrising-tests-1)
       - [Slow Tests](#slow-tests)
 
@@ -1656,7 +1656,7 @@ PASSED                                           [100%]Testing Feature B
 Quickly refreshing some system state...
 ```
 
-#### Marks
+##### Marks
 
 Marks are custom labels which may be added to test functions, via a `pytest.mark.*` decorator, to enable granular control over which tests are run. Test functions may have multiple marks.
 
