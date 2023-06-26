@@ -1446,9 +1446,9 @@ class AddOneTests(unittest.TestCase):
 unittest.main()
 ```
 
-##### Parameterising Tests
+##### Parametrising Tests
 
-Test methods may be parameterised using the `subTest` context manager - this allows for larger coverage of different inputs without needing to create a new test method for each one. However, note that if a single subtest in the test method fails, then the entire test method is marked as having failed.
+Test methods may be parametrised using the `subTest` context manager - this allows for larger coverage of different inputs without needing to create a new test method for each one. However, note that if a single subtest in the test method fails, then the entire test method is marked as having failed.
 
 ```Python
 import unittest
@@ -1683,7 +1683,7 @@ Note that since the names of marks are completely custom, they can be mistyped. 
 Additionally, there are some default marks provided:
 - Test functions can be skipped via the `skip` or `skipif` marks
 - Test functions can be marked as expected to fail via the `xfail` mark
-- Multiple variants of a test can be created by passing different values as arguments to the same test function via the `parametrize` mark (see the [Parametrising Tests](#parameterising-tests-1) section)
+- Multiple variants of a test can be created by passing different values as arguments to the same test function via the `parametrize` mark (see the [Parametrising Tests](#parametersing-tests-1) section)
 
 ```Python
 import pytest
