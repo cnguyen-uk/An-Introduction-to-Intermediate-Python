@@ -85,6 +85,17 @@ Note that this guide is for Python 3, but can easily be translated into Python 2
   * [Setting the `__name__` Variable](#setting-the-__name__-variable)
   * [The `__name__ == "__main__"` Guard](#the-__name__--__main__-guard)
   * [Use Cases](#use-cases)
+- [Testing](#testing)
+  * [Unit Testing](#unit-testing)
+    + [The `unittest` Framework](#the--unittest--framework)
+      - [Parametrising Tests](#parametrising-tests)
+      - [Test Fixtures](#test-fixtures)
+      - [Skipping Tests and Expected Failures](#skipping-tests-and-expected-failures)
+    + [The Pytest Framework](#the-pytest-framework)
+      - [Test Fixtures](#test-fixtures-1)
+      - [Marks](#marks)
+      - [Parametrising Tests](#parametrising-tests-1)
+      - [Slow Tests](#slow-tests)
 
 ## Code Standards
 
@@ -1189,10 +1200,10 @@ It can be useful to create a custom exception class with a custom error message 
 ```Python
 class CustomError(Exception):
     def __init__(self, foo):
-	    self.foo = foo
+        self.foo = foo
 
     def __str__(self):  # Override __str__ rather than __repr__, since we can't assume __str__ == __repr__
-	    return bar + str(self.foo) + baz
+        return bar + str(self.foo) + baz
 
 # Print the following, if thrown:
 # Traceback (most recent call last):
@@ -1392,3 +1403,345 @@ In general, such guard code is useful when we want the module to be executed as 
 - A module that is only ever run as the main program, but unit testing on it is done by importing the module somewhere else, and running some specific test functions - it would clearly be a mistake to run the module's script too.
 
 In particular, note that "running a script" in Python is a side effect of setting up some special variables, and then importing the module containing the script.
+
+## Testing
+
+Testing can generally be divided into two categories:
+- Manual Testing: Performed by a human user interacting with the software by running it and observing the results.
+- Automated Testing: Performed by code.
+
+Most code is complex enough that manual testing is error-prone, tedious, and time-consuming.
+
+The `assert` statement can be used to automatically test that a condition is met, rather than manually observing and verifying the output of a `print()`. If the condition evaluates to `False`, then an `AssertionError` is raised - an optional error message may be specified.
+
+```Python
+def always_true():
+    return True
+
+def test_always_true():
+    assert always_true() == True, f"Expected always_true() to return True, instead got {always_true()}"
+
+test_always_true()
+```
+
+### Unit Testing
+
+A common way to begin setting up automated tests is to do so with the smallest unit of a program, such as a single function, loop, or variable. These tests are called *unit tests*, and should validate a single behaviour of a single unit. Testing more behaviours will improve test coverage, and can be done by creating more test cases for other inputs, including reasonable ones and specific edge cases.
+
+There are multiple built-in frameworks used for unit testing in Python, including `unittest` (also called PyUnit), Pytest, and Doctest, which often aim to provide a test runner, and other tools such as test grouping, setup, teardown, and skipping. Without a framework, tests will stop running after a single `AssertionError`. 
+
+#### The `unittest` Framework
+
+In this framework, which uses the `unittest` module:
+- Unit tests for a single unit being tested are grouped as test methods in a test class which inherits from `unittest.TestCase`
+- Test methods must begin with `test_`
+- Instead of using the `assert` statement, test methods use built-in assert methods of `unittest.TestCase` - common ones include equality and membership methods such as `assertEqual()`, `assertIn()`, and `assertTrue()`; quantitative methods such as `assertLess()`; and exception and warning methods such as `assertRaises()` and `assertWarns()` (for a full list see [the documentation](https://docs.python.org/3/library/unittest.html#classes-and-functions)). This is so that the test runner can accumulate all test results, and produce a report
+- Test methods can be run in code by calling `unittest.main()`
+
+For example:
+
+```Python
+import unittest
+
+def add_one(number):
+    return number + 1
+
+class AddOneTests(unittest.TestCase):
+    def test_add_one_to_zero(self):
+        self.assertEqual(add_one(0), 1, f"Expected 1, instead got {add_one(0)}")
+
+    def test_add_one_to_minus_one(self):
+        self.assertEqual(add_one(-1), 0, f"Expected 0, instead got {add_one(-1)}")
+
+unittest.main()
+```
+
+##### Parametrising Tests
+
+Test methods may be parametrised using the `subTest` context manager - this allows for larger coverage of different inputs without needing to create a new test method for each one. However, note that if a single subtest in the test method fails, then the entire test method is marked as having failed.
+
+```Python
+import unittest
+
+def add_one(number):
+    return number + 1
+
+class AddOneTests(unittest.TestCase):
+    def test_add_one(self):
+        for num in [0, -1]:
+            with self.subTest(num):  # Add optional message to distinguish test iterations, in case of test failures
+                self.assertEqual(add_one(num), num + 1, f"Expected {num + 1}, instead got {add_one(num)}")
+```
+
+##### Test Fixtures
+
+Test fixtures may be created at a method or class level to ensure tests run in a known state (for test doubles, see [`unittest.mock`](https://docs.python.org/3/library/unittest.mock.html)):
+- At a method level, the `setUp()` method is called immediately before calling the test method, to prepare the test fixture; and the `tearDown()` method is called immedately after calling the test method
+- Similarly, at a class level, the `setUpClass()` and `tearDownClass()` class methods are used, which are immediately called before and after calling the first and last test method of a test class, respectively
+
+For example, if the following tests were run:
+
+```Python
+import unittest
+
+def quick_system_refresh():
+    print("Quickly refreshing some system state...")
+
+def full_system_refresh():
+    print("Fully refreshing some system state, this may take some time...")
+
+class FeatureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        full_system_refresh()
+
+    def setUp(self):
+        quick_system_refresh()
+
+    def test_feature_a(self):
+        print("Testing Feature A")
+        ...
+    
+    def test_feature_b(self):
+        print("Testing Feature B")
+        ...
+
+    def test_feature_c(self):
+        print("Testing Feature C")
+        ...
+
+    def tearDown(self):
+        quick_system_refresh()
+
+    @classmethod
+    def tearDownClass(cls):
+        full_system_refresh()
+```
+
+... then the output would be:
+
+```
+Fully refreshing some system state, this may take some time...
+Quickly refreshing some system state...
+Testing Feature A
+Quickly refreshing some system state...
+Quickly refreshing some system state...
+Testing Feature B
+Quickly refreshing some system state...
+Quickly refreshing some system state...
+Testing Feature C
+Quickly refreshing some system state...
+Fully refreshing some system state, this may take some time...
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.000s
+
+OK
+```
+
+##### Skipping Tests and Expected Failures
+
+Tests may be skipped by either:
+- Using a `skip()` decorator, or one of its conditional variants `skipIf()`, `skipUnless()`
+- Calling the `skipTest()` method of `unittest.TestCase` within a `setUp()` or test method
+
+If a test should be expected to fail, then instead of skipping it, we can be mark it with an `expectedFailure` decorator.
+
+```Python
+import unittest
+
+class FeatureTests(unittest.TestCase):
+    @unittest.skip("This test is skipped")
+    def test_feature_a(self):
+        print("Testing Feature A")
+        ...
+
+    def test_feature_b(self):
+        self.skipTest("This test is also skipped")
+        print("Testing Feature B")
+        ...
+
+    @unittest.expectedFailure
+    def test_bad_feature(self):
+        raise Exception("This test will fail")
+```
+
+#### The Pytest Framework
+
+In this framework, which uses the `pytest` module:
+- Test functions must begin with `test_`
+- Test functions perform testing via the `assert` statement
+- Test functions can be run in code using `pytest.main()`
+
+Additionally, [almost all](https://docs.pytest.org/en/7.1.x/how-to/unittest.html) tests written using the `unittest` framework are supported, and can automatically be collected into test files by running `pytest tests`.
+
+Pytest is a popular testing framework which aims to address some of the `unittest` shortcomings. In particular:
+- There's less boilerplate code
+- There's no need to use the specific built-in assert methods of `unittest.TestCase`
+- Test reports have more information and are more readable
+- Test fixtures can be used across multiple test cases and modules
+- The ecosystem is feature-rich and plugin-based
+
+For example:
+
+```Python
+import pytest
+
+def add_one(number):
+    return number + 1
+
+def test_add_one_to_zero():
+    assert add_one(0) == 1
+
+def test_add_one_to_minus_one():
+    assert add_one(-1) == 0
+
+pytest.main()
+```
+
+##### Test Fixtures
+
+Test fixtures allow test functions to use test doubles or run in a known state. In this framework:
+- Fixtures are functions which are decorated with `pytest.fixture`
+- Fixtures are explicitly declared as dependencies by being passed as arguments into the test functions which require them
+- Fixtures are modular so can depend on other fixtures by passing them as arguments; can import other modules; and can be imported (use a [`conftest.py` file](https://docs.pytest.org/en/6.2.x/fixture.html#conftest-py-sharing-fixtures-across-multiple-files) to make them automatically available across a whole project)
+- Fixtures can implement teardown code via `yield` - code placed after this will be run after a dependent test function has run
+
+The following demonstrates the ease of creating and using test doubles, and explicitness of their dependencies:
+
+```Python
+import pytest
+
+@pytest.fixture
+def example_string():
+    return "Hello, World!"
+
+def test_reverse_string(example_string):
+    assert reverse_string(example_string) == "!dlroW, olleH"
+
+def test_uppercase_string(example_string):
+    assert uppercase_string(example_string) == "HELLO, WORLD!"
+```
+
+Similarly, setup and teardown are also created and used with ease. For example, if the following tests were run:
+
+```Python
+import pytest
+
+@pytest.fixture
+def quick_system_refresh():
+    print("Quickly refreshing some system state...")
+    yield
+    print("Quickly refreshing some system state...")
+
+def test_feature_a(quick_system_refresh):
+    print("Testing Feature A")
+    ...
+
+def test_feature_b(quick_system_refresh):
+    print("Testing Feature B")
+```
+
+... then the output would be:
+
+```
+collecting ... collected 2 items
+
+main.py::test_feature_a Quickly refreshing some system state...
+PASSED                                           [ 50%]Testing Feature A
+Quickly refreshing some system state...
+
+main.py::test_feature_b Quickly refreshing some system state...
+PASSED                                           [100%]Testing Feature B
+Quickly refreshing some system state...
+```
+
+##### Marks
+
+Marks are custom labels which may be added to test functions, via a `pytest.mark.*` decorator, to enable granular control over which tests are run. Test functions may have multiple marks.
+
+```Python
+import pytest
+
+@pytest.mark.regression
+@pytest.mark.slow
+def test_full_system():
+    ...
+
+@pytest.mark.regression
+def test_subsystem():
+    ...
+
+@pytest.mark.fast
+def test_some_feature():
+    ...
+```
+
+This can be useful for large test suites, where only running certain tests may be desirable. The framework provides a few ways of doing this:
+- Mark-based filtering via the `-m` (marker) command line option, which allows inclusion or exclusion of marks
+- Name-based filtering via the `-k` (keyword expression) command line option, which allows a substring match to be specified
+- Directory-based filtering by supplying the directories on the command line, though by default this is the current directory
+
+In the above example, if we wanted to run all regression tests, but skip the slow ones, then we would run:
+
+```Bash
+pytest -m "regression and not slow"
+```
+
+Note that since the names of marks are completely custom, they can be mistyped. To avoid this, the `--strict-markers` flag can be used to [ensure that all marks are registered](https://docs.pytest.org/en/latest/how-to/mark.html#registering-marks) in the `pytest.ini` configuration file.
+
+Additionally, there are some default marks provided:
+- Test functions can be skipped via the `skip` or `skipif` marks
+- Test functions can be marked as expected to fail via the `xfail` mark
+- Multiple variants of a test can be created by passing different values as arguments to the same test function via the `parametrize` mark (see the [Parametrising Tests](#parametersing-tests-1) section)
+
+```Python
+import pytest
+
+@pytest.mark.skip("This test is skipped")
+def test_feature_a():
+    print("Testing Feature A")
+    ...
+
+@pytest.mark.skipif(True, reason="This test is also skipped")
+def test_feature_b(self):
+    print("Testing Feature B")
+    ...
+
+@pytest.mark.xfail
+def test_bad_feature():
+    raise Exception("This test will fail")
+```
+
+##### Parametrising Tests
+
+We may use the `parametrize` mark on a single test function to create multiple variants of it, with different values passed as arguments. This is done via the `pytest.mark.parametrize()` decorator, where the first argument is a comma-delimited string of parameter names, and the second argument is a list or tuple of corresponding values.
+
+```Python
+import pytest
+
+def is_divisible_by_three(number):
+    return True if number % 3 == 0 else False
+
+@pytest.mark.parametrize("number, expected_result", [
+  (3, True),
+  (0, True),
+  (2, False),
+  (5.5, False),
+  (-3, True)
+])
+def test_is_divisible_by_three(number, expected_result):
+    assert is_divisible_by_three(number) == expected_result
+```
+
+##### Slow Tests
+
+Although slow test functions can be skipped, eventually they'll need to be run. We can profile the execution of tests via the `--durations` and `--durations-min` command line options. For increased report verbosity, we can pass `-vv`.
+
+For example, to get a list of the slowest 5 tests over 1.5 seconds long:
+
+```Bash
+pytest --durations=5 durations-min=1.5
+```
+
+Note that the reported durations includes the setup time, call time, and teardown time.
