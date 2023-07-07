@@ -1704,7 +1704,7 @@ def test_feature_a():
     ...
 
 @pytest.mark.skipif(True, reason="This test is also skipped")
-def test_feature_b(self):
+def test_feature_b():
     print("Testing Feature B")
     ...
 
