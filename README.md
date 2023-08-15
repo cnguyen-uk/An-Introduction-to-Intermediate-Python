@@ -1617,7 +1617,7 @@ def example_string():
     return "Hello, World!"
 
 def test_reverse_string(example_string):
-    assert reverse_string(example_string) == "!dlroW, olleH"
+    assert reverse_string(example_string) == "!dlroW ,olleH"
 
 def test_uppercase_string(example_string):
     assert uppercase_string(example_string) == "HELLO, WORLD!"
