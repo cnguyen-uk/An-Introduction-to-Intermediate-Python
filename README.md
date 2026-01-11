@@ -632,6 +632,10 @@ def exclamation(*args):
         print(argument.upper())
 
 exclamation("hello", "world", "goodbye", "boredom")
+# Print: HELLO
+#        WORLD
+#        GOODBYE
+#        BOREDOM
 ```
 
 Similarly, to use keyword argument unpacking, we use a parameter, typically `kwargs`, suffixed by `**` in our function signature. Passed keyword arguments will be packed into a dictionary and stored in this parameter, which we can then interact with in the function definition (see the [Dictionary Methods section](#dictionary-methods)). In this case, we call `**kwargs` an *unpacked keyword parameter*.
