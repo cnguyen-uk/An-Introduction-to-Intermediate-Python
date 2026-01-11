@@ -541,7 +541,7 @@ Although some terms such as "argument" and "parameter" are used interchangeably 
 
 If two parameters are defined in a function definition, then when the function is called we must pass exactly two arguments. These are called *required parameters* or *positional parameters*.
 
-By contrast, a *default argument* is an argument which may optionally be passed when a function is called, and defaults to a defined value otherwise. Note that any default values for parameters must be listed *after* any required parameters in a function signature. Sometimes these parameters are called *keyword parameters*.
+By contrast, a *default argument* is an argument which may optionally be passed when a function is called, and defaults to a defined value otherwise. Note that any default values for parameters must be listed *after* any required parameters in a function signature. Sometimes these parameters are called *optional parameters*.
 
 Default arguments can be allowed by making their corresponding parameters have a default value. In the following example the first function call returns `4374` and the second function call returns `3`:
 
