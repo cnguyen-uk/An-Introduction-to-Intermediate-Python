@@ -587,7 +587,7 @@ If we want to pass arguments in any order, then we need to explicitly pass the n
 
 Similar to function signatures, passing arguments in function calls must be done with keyword arguments *after* any positional arguments.
 
-In the following example the first function call returns `12`, the second function call returns `3`, and the third function call returns `128`:
+In the following example the first function call returns `12`, the second function call returns `3`, the third function call returns `128`, and the fourth function call returns `7`:
 
 ```Python
 def example_function(x, y = 7, z = 2):
@@ -596,6 +596,7 @@ def example_function(x, y = 7, z = 2):
 example_function(3, z = 4, y = 1)
 example_function(x = 3)
 example_function(y = 3, x = 4, z = 2)
+example_function(x = 1, z = 7)
 ```
 
 ### Unpacking Multiple Returns
